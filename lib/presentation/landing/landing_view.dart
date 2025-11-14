@@ -206,21 +206,18 @@ class LandingView extends StatelessWidget {
                                   padding: const EdgeInsets.only(left: 50),
                                   child: Row(
                                     children: [
-                                      HoverPopup(
-                                        popup: Text("data"),
-                                        child: verticalBar(
-                                          totalRevenue: 70,
-                                          totalUser: 500,
-                                          totalValue: 500,
-                                          title: "Jan",
-                                        ),
-                                      ),
-
                                       HoverPopupBar(
                                         title: "Feb",
                                         totalRevenue: 100,
                                         totalUser: 520,
                                         totalValue: 1800,
+                                        year: "2025",
+                                      ),
+                                      HoverPopupBar(
+                                        title: "Feb",
+                                        totalRevenue: 5600,
+                                        totalUser: 9000,
+                                        totalValue: 9060,
                                         year: "2025",
                                       ),
                                     ],
@@ -256,6 +253,8 @@ class LandingView extends StatelessWidget {
                             }
                           },
                         ),
+
+                        DemoChart(),
                       ],
                     ),
                   ),

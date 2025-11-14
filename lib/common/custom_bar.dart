@@ -87,6 +87,8 @@ class HoverPopupBar extends StatefulWidget {
 class _HoverPopupState extends State<HoverPopupBar> {
   bool isHover = false;
 
+  double showAt = 0;
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -95,19 +97,80 @@ class _HoverPopupState extends State<HoverPopupBar> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          verticalBar(
-            title: widget.title,
-            totalRevenue: widget.totalRevenue,
-            totalUser: widget.totalUser,
-            totalValue: widget.totalValue,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: [
+              SizedBox(
+                height: 475, // MUST give height
+                width: 70,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final double barHeight = 475 - 25;
+
+                    // Correct dynamic height
+                    final double foregroundHeight =
+                        (barHeight / widget.totalValue) * widget.totalRevenue;
+                    final double backgroundHeight =
+                        (barHeight / widget.totalValue) * widget.totalUser;
+
+                    if (showAt < foregroundHeight) {
+                      showAt = foregroundHeight;
+                    }
+                    if (showAt < backgroundHeight) {
+                      showAt = backgroundHeight;
+                    }
+                    return Stack(
+                      children: [
+                        // background (full bar)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: backgroundHeight,
+                            decoration: BoxDecoration(
+                              color: primaryContainer,
+                              borderRadius: BorderRadius.circular(
+                                defaultRadius,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // foreground (fill from bottom)
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            width: constraints.maxWidth,
+                            height: foregroundHeight,
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(
+                                defaultRadius,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(
+                height: 22,
+                child: Text(widget.title, style: titleSmall()),
+              ),
+            ],
           ),
 
           /// Popup
           if (isHover)
             Positioned(
               // left: 0,
-              right: 35,
-              top: 50,
+              // right: 35,
+              bottom: (showAt < 300) ? showAt : 300 + 20,
               child: Material(
                 color: Colors.transparent,
                 child: Container(
