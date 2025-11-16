@@ -1,4 +1,7 @@
-part of '../landing_view.dart';
+part of '../home_view.dart';
+
+
+
 
 Widget subscriptionLayout() {
   return Container(

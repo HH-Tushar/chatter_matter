@@ -8,6 +8,9 @@ class LandingController extends ChangeNotifier {
     notify();
   }
 
+  int currentIndex = 0;
+  final children = [HomeView()];
+
   void notify() {
     if (hasListeners) notifyListeners();
   }
