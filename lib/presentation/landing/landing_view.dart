@@ -11,6 +11,8 @@ import '../../common/custom_button.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
 import '../../common/testComponent.dart';
+import '../../env.dart';
+import '../category/category_list_view.dart';
 part 'components/drawer.dart';
 
 part 'controller.dart';
@@ -41,28 +43,38 @@ class LandingView extends StatelessWidget {
                 child: Column(
                   spacing: 10,
                   children: [
+                    Column(
+                      children: [
+                        vPad10,
+                        Text(appName, style: titleLarge()),
+                        vPad5,
+                        Text("Admin Dashboard", style: bodyMedium()),
+                      ],
+                    ),
+                    vPad15,
+
                     drawerButton(
                       icon: "assets/icon/dashboard.svg",
                       isSelected: controller.selectedCategory == "",
-                      onTap: () => controller.changeView(""),
+                      onTap: () => controller.changeView("",0),
                       title: "Dashboard",
                     ),
                     drawerButton(
                       icon: "assets/icon/category.svg",
                       isSelected: controller.selectedCategory == "Category",
-                      onTap: () => controller.changeView("Category"),
+                      onTap: () => controller.changeView("Category",1),
                       title: "Category",
                     ),
                     drawerButton(
                       icon: "assets/icon/users.svg",
                       isSelected: controller.selectedCategory == "Users",
-                      onTap: () => controller.changeView("Users"),
+                      onTap: () => controller.changeView("Users",2),
                       title: "Users",
                     ),
                     drawerButton(
                       icon: "assets/icon/subscription.svg",
                       isSelected: controller.selectedCategory == "Subscription",
-                      onTap: () => controller.changeView("Subscription"),
+                      onTap: () => controller.changeView("Subscription",3),
                       title: "Subscription",
                     ),
                   ],

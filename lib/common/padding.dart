@@ -13,6 +13,8 @@ const hPadExp = SizedBox(
 const hPad5 = SizedBox(width: 5, height: 0);
 const hPad15 = SizedBox(width: 15, height: 0);
 const hPad20 = SizedBox(width: 20, height: 0);
+const hPad25 = SizedBox(width: 25, height: 0);
+const hPad30 = SizedBox(width: 30, height: 0);
 
 const defaultPadding = 16.0;
 const defaultRadius = 12.0;

@@ -1,9 +1,5 @@
 part of '../home_view.dart';
 
-
-
-
-
 Widget quickStartLayout() {
   return Container(
     height: 330,
@@ -28,12 +24,23 @@ Widget quickStartLayout() {
             ),
           ],
         ),
-        _quickTile(color: primaryColor, title: "Total Questions", value: "450"),
-        _quickTile(color: primaryColor, title: "Total Questions", value: "450"),
+        _quickTile(
+          color: primaryColor,
+          title: "Total Questions",
+          value: "450",
+          icon: Icons.chat_bubble_outline,
+        ),
+        _quickTile(
+          color: Colors.red,
+          title: "Total Questions",
+          value: "450",
+          icon: Icons.favorite_border,
+        ),
         _quickTile(
           color: customBlue,
           title: "Total Questions",
           value: formatNumberWithComa(1500),
+          icon: Icons.show_chart,
         ),
       ],
     ),
@@ -42,6 +49,7 @@ Widget quickStartLayout() {
 
 _quickTile({
   required Color color,
+  required IconData icon,
   required String title,
   required String value,
 }) {
@@ -57,7 +65,7 @@ _quickTile({
               borderRadius: BorderRadius.circular(defaultRadius),
               color: color.withAlpha(20),
             ),
-            child: Icon(Icons.chat_bubble_outline, color: color),
+            child: Icon(icon, color: color),
           ),
 
           Text(title, style: titleMedium(fontWeight: FontWeight.w400)),
