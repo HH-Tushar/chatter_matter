@@ -1,10 +1,21 @@
 import 'package:chatter_matter_admin/common/colors.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
+import 'package:chatter_matter_admin/common/navigator.dart';
 import 'package:chatter_matter_admin/common/padding.dart';
+import 'package:chatter_matter_admin/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../application/local_data/category_local_data.dart';
+import '../../application/model/category_model.dart';
 import '../../common/app_bar.dart';
+import '../../common/custom_button.dart';
+import '../../common/custom_formatter.dart';
+import '../../common/custom_input.dart';
+import '../../provider/category_provider.dart';
+import '../question/question_list_view.dart';
 part 'add_category.dart';
 
 class CategoryListView extends StatelessWidget {
@@ -12,13 +23,17 @@ class CategoryListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CategoryProvider controller = context.watch();
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(defaultPadding),
           child: Column(
             children: [
-              customAppBar(),
+              customAppBar(
+                title: "Category Management",
+                subTitle: "Add, edit, and manage questions",
+              ),
               vPad15,
 
               Row(
@@ -27,6 +42,9 @@ class CategoryListView extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       decoration: InputDecoration(
+                        filled: true,
+                        hintText: "Search here..",
+                        fillColor: customWhite,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -38,6 +56,9 @@ class CategoryListView extends StatelessWidget {
                     child: DropdownButtonFormField(
                       icon: Icon(Icons.keyboard_arrow_down_outlined),
                       decoration: InputDecoration(
+                        filled: true,
+                        hintText: "Select Category",
+                        fillColor: customWhite,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -71,7 +92,7 @@ class CategoryListView extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        showBasicDialog(context: context);
+                        showAddCategoryDialog(context: context);
                       },
                       label: Text(
                         "Add Category",
@@ -89,89 +110,103 @@ class CategoryListView extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-            itemCount: 10,
-            itemBuilder: (context, index) => Card(
-              color: primaryColor,
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  spacing: 10,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        spacing: 12,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Reflection on the day",
-                            style: titleMedium(
-                              fontWeight: FontWeight.w500,
-                              color: customWhite,
-                            ),
-                          ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+            itemCount: controller.categoryList.length,
+            itemBuilder: (context, index) {
+              final item = controller.categoryList[index];
+              return Card(
+                clipBehavior: Clip.antiAlias,
+                color: Color(int.parse(item.colorCode)),
+                child: MaterialButton(
+                  onPressed: () => context.go(CustomRoute.question),
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Row(
+                      spacing: 10,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            spacing: 12,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SvgPicture.asset(
-                                "assets/common/category_left_icon.svg",
-                                height: 24,
-                              ),
-                              hPad30,
-                              Icon(
-                                Icons.chat_bubble_outline,
-                                color: customWhite,
-                              ),
-                              hPad10,
                               Text(
-                                "45 questions",
-                                style: bodyMedium(color: customWhite),
+                                item.title,
+                                style: titleMedium(
+                                  fontWeight: FontWeight.w500,
+                                  color: customWhite,
+                                ),
                               ),
-                              hPad30,
-                              Icon(Icons.favorite, color: Colors.red),
-                              hPad10,
-                              Text(
-                                "80 favorites",
-                                style: bodyMedium(color: customWhite),
-                              ),
-                              hPad30,
-                              Text(
-                                "Created At : 2025-10-15",
-                                style: bodyMedium(color: customWhite),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/common/category_left_icon.svg",
+                                    height: 24,
+                                  ),
+                                  hPad30,
+                                  Icon(
+                                    Icons.chat_bubble_outline,
+                                    color: customWhite,
+                                  ),
+                                  hPad10,
+                                  Text(
+                                    "${item.questionCount} questions",
+                                    style: bodyMedium(color: customWhite),
+                                  ),
+                                  hPad30,
+                                  Icon(Icons.favorite, color: Colors.red),
+                                  hPad10,
+                                  Text(
+                                    "${item.favoritesCount} favorites",
+                                    style: bodyMedium(color: customWhite),
+                                  ),
+                                  hPad30,
+                                  Text(
+                                    "Updated At : ${item.updatedAt != null ? customDateFormatter(item.updatedAt!) : "N/A"}",
+                                    style: bodyMedium(color: customWhite),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
 
-                    Container(
-                      height: 36,
-                      width: 36,
-                      decoration: BoxDecoration(
-                        color: Color(0xffE0E0E0),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                        GestureDetector(
+                          onTap: () => showAddCategoryDialog(
+                            context: context,
+                            oldItem: item,
+                          ),
+                          child: Container(
+                            height: 36,
+                            width: 36,
+                            decoration: BoxDecoration(
+                              color: Color(0xffE0E0E0),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
 
-                      child: Icon(Icons.edit),
-                    ),
-                    Container(
-                      height: 36,
-                      width: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade100,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                            child: Icon(Icons.edit),
+                          ),
+                        ),
 
-                      child: Icon(
-                        Icons.delete_forever_outlined,
-                        color: Colors.red,
-                      ),
+                        Container(
+                          height: 36,
+                          width: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade100,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+
+                          child: Icon(
+                            Icons.delete_forever_outlined,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ],

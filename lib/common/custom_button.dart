@@ -38,3 +38,50 @@ Widget drawerButton({
     ),
   );
 }
+
+Widget customOutlineButton({
+  required bool isLoading,
+  required VoidCallback onTap,
+  required String title,
+  required Color bg,
+}) {
+  return MaterialButton(
+    height: 50,
+    minWidth: 150,
+    elevation: 1,
+
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+      side: BorderSide(color: customPurple),
+    ),
+
+    onPressed: isLoading ? null : onTap,
+
+    child: Center(
+      child: Text(title, style: titleSmall(color: customPurple)),
+    ),
+  );
+}
+
+Widget customFilledButton({
+  required bool isLoading,
+  required VoidCallback onTap,
+  required String title,
+  required Color bg,
+  Color? textColor,
+}) {
+  return MaterialButton(
+    height: 50,
+    minWidth: 150,
+    elevation: 1,
+
+    color: bg,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+    onPressed: isLoading ? null : onTap,
+
+    child: Center(
+      child: Text(title, style: titleSmall(color: textColor ?? customWhite)),
+    ),
+  );
+}

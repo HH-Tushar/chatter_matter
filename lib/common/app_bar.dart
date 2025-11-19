@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'custom_text_style.dart';
 
-Widget customAppBar() {
+Widget customAppBar({required String title,required String subTitle}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Welcome Back", style: titleLarge()),
+          Text(title, style: titleLarge()),
           Text(
-            "It is time to menage your Credentials",
+            subTitle,
             style: titleSmall(color: customGrey),
           ),
         ],

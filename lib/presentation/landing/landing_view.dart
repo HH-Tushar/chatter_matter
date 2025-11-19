@@ -1,12 +1,13 @@
 import 'package:chatter_matter_admin/presentation/home/home_view.dart';
+import 'package:chatter_matter_admin/router.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../common/custom_bar.dart';
 import '../../common/custom_button.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
@@ -15,14 +16,16 @@ import '../../env.dart';
 import '../category/category_list_view.dart';
 part 'components/drawer.dart';
 
-part 'controller.dart';
+
 
 class LandingView extends StatelessWidget {
-  const LandingView({super.key});
+  final Widget child;
+  const LandingView({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
-    final LandingController controller = context.watch();
+    // final LandingController controller = context.watch();
+    final String currentPath = GoRouterState.of(context).matchedLocation;
     return Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(
@@ -55,26 +58,26 @@ class LandingView extends StatelessWidget {
 
                     drawerButton(
                       icon: "assets/icon/dashboard.svg",
-                      isSelected: controller.selectedCategory == "",
-                      onTap: () => controller.changeView("",0),
+                      isSelected: currentPath.contains(CustomRoute.home),
+                      onTap: () => context.go(CustomRoute.home),
                       title: "Dashboard",
                     ),
                     drawerButton(
                       icon: "assets/icon/category.svg",
-                      isSelected: controller.selectedCategory == "Category",
-                      onTap: () => controller.changeView("Category",1),
+                      isSelected: currentPath.contains(CustomRoute.category),
+                      onTap: () => context.go(CustomRoute.category),
                       title: "Category",
                     ),
                     drawerButton(
                       icon: "assets/icon/users.svg",
-                      isSelected: controller.selectedCategory == "Users",
-                      onTap: () => controller.changeView("Users",2),
+                      isSelected: currentPath.contains(CustomRoute.users),
+                      onTap: () => context.go(CustomRoute.users),
                       title: "Users",
                     ),
                     drawerButton(
                       icon: "assets/icon/subscription.svg",
-                      isSelected: controller.selectedCategory == "Subscription",
-                      onTap: () => controller.changeView("Subscription",3),
+                      isSelected: currentPath.contains(CustomRoute.subscription),
+                      onTap: () => context.go(CustomRoute.subscription),
                       title: "Subscription",
                     ),
                   ],
@@ -82,7 +85,7 @@ class LandingView extends StatelessWidget {
               ),
             ),
 
-            Expanded(child: controller.children[controller.currentIndex]),
+            Expanded(child: child),
           ],
         ),
       ),
