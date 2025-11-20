@@ -234,7 +234,7 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                     children: [
                       Expanded(
                         child: customOutlineButton(
-                          bg: customPurple,
+                          baseColor: customPurple,
                           isLoading: categoryProvider.isAddingCategory,
                           onTap: () => Navigator.pop(context),
                           title: "Cancel",

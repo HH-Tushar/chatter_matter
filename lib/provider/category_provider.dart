@@ -18,4 +18,13 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+  Future<bool> removeCategory(Category data) async {
+    isAddingCategory = true;
+    notifyListeners();
+    categoryList.remove(data);
+    isAddingCategory = false;
+    notifyListeners();
+    return true;
+  }
 }

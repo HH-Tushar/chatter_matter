@@ -43,22 +43,31 @@ Widget customOutlineButton({
   required bool isLoading,
   required VoidCallback onTap,
   required String title,
-  required Color bg,
+  Color? bg,
+  Color? baseColor,
+  IconData? icon,
 }) {
   return MaterialButton(
     height: 50,
     minWidth: 150,
     elevation: 1,
-
+    color: bg,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
-      side: BorderSide(color: customPurple),
+      side: BorderSide(color: baseColor ?? customPurple),
     ),
 
     onPressed: isLoading ? null : onTap,
 
     child: Center(
-      child: Text(title, style: titleSmall(color: customPurple)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 5,
+        children: [
+          if (icon != null) Icon(icon, color: baseColor ?? customPurple),
+          Text(title, style: titleSmall(color: baseColor ?? customPurple)),
+        ],
+      ),
     ),
   );
 }

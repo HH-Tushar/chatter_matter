@@ -1,9 +1,13 @@
+import 'package:chatter_matter_admin/common/custom_button.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_bar.dart';
 import '../../common/colors.dart';
 import '../../common/padding.dart';
+
+part 'user_row.dart';
+part 'edit_user.dart';
 
 class UserListView extends StatelessWidget {
   const UserListView({super.key});
@@ -151,126 +155,9 @@ class UserListView extends StatelessWidget {
             child: ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: defaultPadding),
               itemCount: 100,
-              itemBuilder: (context, index) => Card(
-                color: customWhite,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                  side: BorderSide(color: primaryContainer),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [Text("User name"), Text("email")],
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: customGrey,
-                                borderRadius: BorderRadius.circular(
-                                  defaultRadius,
-                                ),
-                              ),
-                              child: Text("Free"),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Expanded(
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("121 answers"),
-                              Text(
-                                "23 favorite",
-                                style: bodySmall(color: customGrey),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: customGrey,
-                                borderRadius: BorderRadius.circular(
-                                  defaultRadius,
-                                ),
-                              ),
-                              child: Text("active"),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Expanded(
-                        child: Row(
-                          spacing: 20,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            MaterialButton(
-                              minWidth: 50,
-                              height: 45,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              color: customLightOlive,
-                              onPressed: () {},
-                              child: Icon(Icons.edit),
-                            ),
-                            MaterialButton(
-                              minWidth: 50,
-                              height: 45,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              color: customLightOlive,
-                              onPressed: () {},
-                              child: Row(
-                                spacing: 10,
-                                children: [
-                                  hPad5,
-                                  Icon(Icons.visibility),
-                                  Text(
-                                    "View",
-                                    style: bodyMedium(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  hPad5,
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              itemBuilder: (context, index) => _userRow(
+                onManage: () => showUserManagementDialog(context: context),
+                onView: () => showUserDetailsDialog(context: context),
               ),
             ),
           ),

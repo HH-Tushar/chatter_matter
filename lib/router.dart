@@ -18,7 +18,8 @@ class CustomRoute {
 
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>();
-final router = GoRouter(initialLocation: '/home', routes: [shellRoute]);
+
+final router = GoRouter(initialLocation: '/home', routes: [shellRoute, auth]);
 
 //
 
@@ -57,3 +58,15 @@ final shellRoute = ShellRoute(
     ),
   ],
 );
+
+final auth = GoRoute(path: "/auth", builder: (context, state) => Placeholder());
+
+
+
+
+
+
+
+
+
+

@@ -10,6 +10,8 @@ const customYellow = Color(0xffFFFAB9);
 const customBlue = Color(0xff155DFC);
 const customPurple = Color(0xff4A136A);
 const customRed = Color(0xffE7000B);
+const customGreen = Color(0xff008236);
+const customGreenContainer = Color(0xffDCFCE7);
 
 //dedicated tileColor
 const customLightBlue = Color(0xff95ADF3);

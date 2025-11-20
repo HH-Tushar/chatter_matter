@@ -1,4 +1,5 @@
 import 'package:chatter_matter_admin/common/colors.dart';
+import 'package:chatter_matter_admin/common/custom_dialouge.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
 import 'package:chatter_matter_admin/common/navigator.dart';
 import 'package:chatter_matter_admin/common/padding.dart';
@@ -188,17 +189,29 @@ class CategoryListView extends StatelessWidget {
                           ),
                         ),
 
-                        Container(
-                          height: 36,
-                          width: 36,
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade100,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                        GestureDetector(
+                          onTap: () async {
+                            final check = await showDeleteDialogue(
+                              context: context,
+                              content: "${item.title} will be deleted forever.",
+                              title: "Delete Category..??",
+                            );
+                            if (check == true) {
+                              controller.removeCategory(item);
+                            }
+                          },
+                          child: Container(
+                            height: 36,
+                            width: 36,
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade100,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
 
-                          child: Icon(
-                            Icons.delete_forever_outlined,
-                            color: Colors.red,
+                            child: Icon(
+                              Icons.delete_forever_outlined,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],
