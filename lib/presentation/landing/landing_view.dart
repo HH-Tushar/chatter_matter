@@ -1,22 +1,14 @@
-import 'package:chatter_matter_admin/presentation/home/home_view.dart';
 import 'package:chatter_matter_admin/router.dart';
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import '../../common/colors.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../common/custom_button.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
-import '../../common/testComponent.dart';
+
 import '../../env.dart';
-import '../category/category_list_view.dart';
+
 part 'components/drawer.dart';
-
-
 
 class LandingView extends StatelessWidget {
   final Widget child;
@@ -76,16 +68,42 @@ class LandingView extends StatelessWidget {
                     ),
                     drawerButton(
                       icon: "assets/icon/subscription.svg",
-                      isSelected: currentPath.contains(CustomRoute.subscription),
+                      isSelected: currentPath.contains(
+                        CustomRoute.subscription,
+                      ),
                       onTap: () => context.go(CustomRoute.subscription),
                       title: "Subscription",
+                    ),
+                    drawerButton(
+                      icon: "assets/icon/setting.svg",
+                      isSelected: currentPath.contains(CustomRoute.setting),
+                      onTap: () => context.go(CustomRoute.setting),
+                      title: "Setting",
+                    ),
+                    drawerButton(
+                      isLogoutButton: true,
+                      icon: "assets/icon/logout.svg",
+                      isSelected: currentPath.contains(
+                        CustomRoute.subscription,
+                      ),
+                      onTap: () => context.go(CustomRoute.subscription),
+                      title: "Logout",
                     ),
                   ],
                 ),
               ),
             ),
 
-            Expanded(child: child),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: defaultPadding,
+                  right: defaultPadding,
+                  top: defaultPadding,
+                ),
+                child: child,
+              ),
+            ),
           ],
         ),
       ),

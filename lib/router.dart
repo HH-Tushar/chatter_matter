@@ -1,4 +1,6 @@
 // 1. Define the Routes
+import 'package:chatter_matter_admin/presentation/setting/setting_view.dart';
+import 'package:chatter_matter_admin/presentation/subscription/subscription_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +16,7 @@ class CustomRoute {
   static const String question = "/category/question";
   static const String users = "/users";
   static const String subscription = "/subscription";
+  static const String setting = "/setting";
 }
 
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -54,7 +57,12 @@ final shellRoute = ShellRoute(
     GoRoute(
       path: CustomRoute.subscription,
       pageBuilder: (context, state) =>
-          const NoTransitionPage(child: Placeholder()),
+          const NoTransitionPage(child: SubscriptionView()),
+    ),
+    GoRoute(
+      path: CustomRoute.setting,
+      pageBuilder: (context, state) =>
+          const NoTransitionPage(child: SettingView()),
     ),
   ],
 );

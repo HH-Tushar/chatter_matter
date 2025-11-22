@@ -1,7 +1,6 @@
 import 'package:chatter_matter_admin/common/colors.dart';
 import 'package:chatter_matter_admin/common/custom_dialouge.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
-import 'package:chatter_matter_admin/common/navigator.dart';
 import 'package:chatter_matter_admin/common/padding.dart';
 import 'package:chatter_matter_admin/router.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +8,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/local_data/category_local_data.dart';
 import '../../application/model/category_model.dart';
 import '../../common/app_bar.dart';
 import '../../common/custom_button.dart';
 import '../../common/custom_formatter.dart';
 import '../../common/custom_input.dart';
 import '../../provider/category_provider.dart';
-import '../question/question_list_view.dart';
+
 part 'add_category.dart';
 
 class CategoryListView extends StatelessWidget {
@@ -27,90 +25,87 @@ class CategoryListView extends StatelessWidget {
     final CategoryProvider controller = context.watch();
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: Column(
-            children: [
-              customAppBar(
-                title: "Category Management",
-                subTitle: "Add, edit, and manage questions",
-              ),
-              vPad15,
+        Column(
+          children: [
+            customAppBar(
+              title: "Category Management",
+              subTitle: "Add, edit, and manage questions",
+            ),
+            vPad15,
 
-              Row(
-                spacing: 20,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: "Search here..",
-                        fillColor: customWhite,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        prefixIcon: Icon(Icons.search),
+            Row(
+              spacing: 20,
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: "Search here..",
+                      fillColor: customWhite,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
                       ),
+                      prefixIcon: Icon(Icons.search),
                     ),
                   ),
-                  Expanded(
-                    child: DropdownButtonFormField(
-                      icon: Icon(Icons.keyboard_arrow_down_outlined),
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: "Select Category",
-                        fillColor: customWhite,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        prefixIcon: Icon(Icons.filter_alt_outlined),
+                ),
+                Expanded(
+                  child: DropdownButtonFormField(
+                    icon: Icon(Icons.keyboard_arrow_down_outlined),
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: "Select Category",
+                      fillColor: customWhite,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
                       ),
-
-                      borderRadius: BorderRadius.circular(12),
-
-                      items: [
-                        DropdownMenuItem(
-                          value: "all",
-                          child: Text("All Category"),
-                        ),
-                        DropdownMenuItem(
-                          value: "all3",
-                          child: Text("All Category"),
-                        ),
-                      ],
-                      onChanged: (e) async {},
+                      prefixIcon: Icon(Icons.filter_alt_outlined),
                     ),
-                  ),
 
-                  SizedBox(
-                    height: 50,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        // fixedSize: Size(200, 50),
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                    borderRadius: BorderRadius.circular(12),
+
+                    items: [
+                      DropdownMenuItem(
+                        value: "all",
+                        child: Text("All Category"),
                       ),
-                      onPressed: () {
-                        showAddCategoryDialog(context: context);
-                      },
-                      label: Text(
-                        "Add Category",
-                        style: bodyMedium(color: customWhite),
+                      DropdownMenuItem(
+                        value: "all3",
+                        child: Text("All Category"),
                       ),
-                      icon: Icon(Icons.add, color: customWhite),
-                    ),
+                    ],
+                    onChanged: (e) async {},
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+
+                SizedBox(
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      // fixedSize: Size(200, 50),
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () {
+                      showAddCategoryDialog(context: context);
+                    },
+                    label: Text(
+                      "Add Category",
+                      style: bodyMedium(color: customWhite),
+                    ),
+                    icon: Icon(Icons.add, color: customWhite),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
 
         Expanded(
           child: ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+            // padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             itemCount: controller.categoryList.length,
             itemBuilder: (context, index) {
               final item = controller.categoryList[index];

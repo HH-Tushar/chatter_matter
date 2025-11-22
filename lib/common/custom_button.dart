@@ -9,12 +9,17 @@ Widget drawerButton({
   required String title,
   required String icon,
   required bool isSelected,
+  bool? isLogoutButton,
 }) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       maximumSize: Size(200, 50),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      backgroundColor: isSelected ? primaryColor : openDrawerBg,
+      backgroundColor: isLogoutButton == true
+          ? const Color(0xffFFE0E0)
+          : isSelected
+          ? primaryColor
+          : openDrawerBg,
       elevation: isSelected ? 1 : 0,
     ),
     onPressed: onTap,
@@ -26,12 +31,22 @@ Widget drawerButton({
         children: [
           SvgPicture.asset(
             icon,
-            color: isSelected ? customWhite : primaryColor,
+            color: isLogoutButton == true
+                ? customRed
+                : isSelected
+                ? customWhite
+                : primaryColor,
           ),
 
           Text(
             title,
-            style: titleSmall(color: isSelected ? customWhite : primaryColor),
+            style: titleSmall(
+              color: isLogoutButton == true
+                  ? customRed
+                  : isSelected
+                  ? customWhite
+                  : primaryColor,
+            ),
           ),
         ],
       ),
@@ -94,3 +109,88 @@ Widget customFilledButton({
     ),
   );
 }
+
+// Widget customOutlineButton({
+//   required bool isLoading,
+//   required VoidCallback onTap,
+//   required String title,
+//   Color? bg,
+//   Color? baseColor,
+//   IconData? icon,
+//   double? width,
+// }) {
+//   final Color borderColor = baseColor ?? customPurple;
+
+//   return MouseRegion(
+//     cursor: isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
+//     child: InkWell(
+//       onTap: isLoading ? null : onTap,
+//       borderRadius: BorderRadius.circular(8),
+//       hoverColor: borderColor.withOpacity(0.05),
+//       child: AnimatedContainer(
+//         duration: Duration(milliseconds: 150),
+//         height: 50,
+//         width: width ?? 150,
+
+//         decoration: BoxDecoration(
+//           color: bg ?? Colors.transparent,
+//           borderRadius: BorderRadius.circular(8),
+//           border: Border.all(color: borderColor, width: 1),
+//         ),
+//         child: Center(
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             spacing: 6,
+//             children: [
+//               if (icon != null) Icon(icon, color: borderColor, size: 20),
+//               Text(title, style: titleSmall(color: borderColor)),
+//             ],
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+// Widget customFilledButton({
+//   required bool isLoading,
+//   required VoidCallback onTap,
+//   required String title,
+//   required Color bg,
+//   Color? textColor,
+// }) {
+//   return MouseRegion(
+//     cursor: isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
+//     child: InkWell(
+//       onTap: isLoading ? null : onTap,
+//       borderRadius: BorderRadius.circular(8),
+//       hoverColor: Colors.white.withOpacity(0.08),
+//       child: AnimatedContainer(
+//         duration: Duration(milliseconds: 150),
+//         height: 50,
+//         width: 150,
+//         decoration: BoxDecoration(
+//           color: bg,
+//           borderRadius: BorderRadius.circular(8),
+//         ),
+//         child: Center(
+//           child: Text(
+//             title,
+//             style: titleSmall(color: textColor ?? customWhite),
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }

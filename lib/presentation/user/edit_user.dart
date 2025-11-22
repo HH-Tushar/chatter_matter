@@ -149,6 +149,7 @@ void showUserManagementDialog({required BuildContext context}) {
                     bg: Color(0xffFFE0E0),
                     baseColor: customRed,
                     icon: Icons.block,
+                    // width: double.infinity,
                   ),
                 ],
               ),
@@ -235,7 +236,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                 child: Row(
                   spacing: 15,
                   children: [
-                    Expanded(
+                    Flexible(
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade400),
@@ -270,7 +271,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                         ),
                       ),
                     ),
-                    Expanded(
+                    Flexible(
                       child: Container(
                         padding: EdgeInsets.all(defaultPadding),
                         decoration: BoxDecoration(
@@ -296,6 +297,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                             ),
 
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   "Joined",
@@ -312,13 +314,106 @@ void showUserDetailsDialog({required BuildContext context}) {
                 ),
               ),
 
-              customOutlineButton(
-                isLoading: false,
-                onTap: () {},
-                title: "Deactivate Account",
-                bg: Color(0xffFFE0E0),
-                baseColor: customRed,
-                icon: Icons.block,
+              vPad20,
+              Container(
+                width: double.infinity,
+                // height: 80,
+                padding: EdgeInsets.all(defaultPadding),
+                decoration: BoxDecoration(
+                  color: Color(0xffF8F8F8),
+                  borderRadius: BorderRadius.circular(defaultRadius),
+                ),
+
+                child: Column(
+                  children: [
+                    Row(
+                      spacing: 10,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                          ),
+                          child: SvgPicture.asset(
+                            "assets/common/message.svg",
+                            color: customWhite,
+                          ),
+                        ),
+                        Text("Activity Summery", style: titleSmall()),
+                      ],
+                    ),
+                    vPad10,
+
+                    Row(
+                      spacing: 15,
+                      children: [
+                        Flexible(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: customWhite,
+                              borderRadius: BorderRadius.circular(
+                                defaultRadius,
+                              ),
+                            ),
+                            padding: EdgeInsets.all(defaultPadding),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  spacing: 10,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/common/message.svg",
+                                      color: primaryColor,
+                                    ),
+
+                                    Text("Active", style: titleSmall()),
+                                  ],
+                                ),
+                                Text(
+                                  "Status",
+                                  style: bodyMedium(color: customGrey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Flexible(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: customWhite,
+                              borderRadius: BorderRadius.circular(
+                                defaultRadius,
+                              ),
+                            ),
+                            padding: EdgeInsets.all(defaultPadding),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  spacing: 10,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/common/favorite.svg",
+                                      color: customRed,
+                                    ),
+
+                                    Text("Favorites", style: titleSmall()),
+                                  ],
+                                ),
+                                Text("8", style: bodyMedium(color: customGrey)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

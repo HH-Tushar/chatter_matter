@@ -4,6 +4,7 @@ const openDrawerBg = Color(0xffFBEFFF);
 const customWhite = Color(0xffFFFFFF);
 const customBlack = Color(0xff000000);
 const customGrey = Color(0xff616161);
+const customLightGrey = Color(0xffBDBDBD);
 const primaryColor = Color(0xffA65FC2);
 const primaryContainer = Color(0xffD6A9E6);
 const customYellow = Color(0xffFFFAB9);
@@ -21,6 +22,7 @@ const customLightBrawn = Color(0xffD6A6B4);
 const customLightLavender = Color(0xffE1B9E6);
 const customLightOlive = Color(0xffA8B8A0);
 const customGreyOlive = Color(0xffA0B8C3);
+const vipGradient = [Color(0xffFFFAB9), Color(0xffD6A9E6)];
 
 const tileColors = [
   primaryColor,

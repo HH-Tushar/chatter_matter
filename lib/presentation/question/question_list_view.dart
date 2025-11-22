@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import '../../application/model/category_model.dart';
 import '../../common/app_bar.dart';
 import '../../common/colors.dart';
 import '../../common/custom_button.dart';

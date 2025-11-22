@@ -8,21 +8,23 @@ Widget horizontalBar({
   required Color foregroundColor,
   required int value,
   required int totalUser,
-  required String title,
+  String? title,
+  double? barHeight,
   required List<Color> gradient,
 }) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     spacing: 8,
     children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      if (title != null && title.isNotEmpty)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-        children: [
-          Text(title, style: bodyLarge()),
-          Text(formatNumberWithComa(value), style: bodyLarge()),
-        ],
-      ),
+          children: [
+            Text(title, style: bodyLarge()),
+            Text(formatNumberWithComa(value), style: bodyLarge()),
+          ],
+        ),
 
       LayoutBuilder(
         builder: (context, constraints) {
@@ -35,7 +37,7 @@ Widget horizontalBar({
               //background
               Container(
                 width: width,
-                height: 15,
+                height: barHeight ?? 15,
                 decoration: BoxDecoration(
                   color: customGrey.withAlpha(50),
                   borderRadius: BorderRadius.circular(defaultRadius),
@@ -45,7 +47,7 @@ Widget horizontalBar({
               // foreground
               Container(
                 width: foregroundCoverage,
-                height: 15,
+                height: barHeight ?? 15,
                 decoration: BoxDecoration(
                   color: gradient.isEmpty ? foregroundColor : null,
                   gradient: gradient.isEmpty
@@ -61,7 +63,6 @@ Widget horizontalBar({
     ],
   );
 }
-
 
 Widget verticalBar({
   required int totalUser,

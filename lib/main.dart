@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'provider/category_provider.dart';
 import 'provider/dashboard_provider.dart';
+import 'provider/subscription_provider.dart';
 import 'router.dart';
 
 void main() {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => SubscriptionProvider()),
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',
