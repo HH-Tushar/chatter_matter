@@ -3,6 +3,7 @@ import '../model/subscription_model.dart';
 final List<SubscriptionPlan> subscriptionPlans = [
   SubscriptionPlan(
     id: "free",
+    type: "free",
     title: "Free",
     pricePerMonth: 0,
     features: [
@@ -18,21 +19,23 @@ final List<SubscriptionPlan> subscriptionPlans = [
   ),
   SubscriptionPlan(
     id: "standard",
+    type: "standard",
     title: "Standard",
     pricePerMonth: 9.99,
     features: [
-      "Unlimited questions",
+      "3 questions per day",
       "Priority access",
       "No ads",
     ],
     activeUsers: 423,
     // percentageOfTotal: 29.4,
-    questionLimitPerDay: -1, // unlimited
+    questionLimitPerDay: 3, // unlimited
     adsIncluded: false,
     isPopular: true,
   ),
   SubscriptionPlan(
     id: "vip",
+    type: "vip",
     title: "VIP",
     pricePerMonth: 19.99,
     features: [

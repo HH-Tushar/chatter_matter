@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
+
 const openDrawerBg = Color(0xffFBEFFF);
 const customWhite = Color(0xffFFFFFF);
 const customBlack = Color(0xff000000);
@@ -33,4 +35,19 @@ const tileColors = [
   customLightLavender,
   customLightOlive,
   customGreyOlive,
+];
+
+final customShadow = [
+  BoxShadow(
+    offset: Offset(0, 4),
+    color: customLightGrey,
+    blurRadius: 4,
+    spreadRadius: -6,
+  ),
+  BoxShadow(
+    offset: Offset(2, 8),
+    color: customLightGrey,
+    blurRadius: 15,
+    spreadRadius: -3,
+  ),
 ];

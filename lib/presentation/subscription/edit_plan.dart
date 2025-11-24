@@ -8,40 +8,31 @@ void showEditPlanDialog({
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      // String selectedColor = oldItem?.colorCode ?? '';
-      // int favoritesCount = oldItem?.favoritesCount ?? 0;
-      // int questionCount = oldItem?.questionCount ?? 0;
-      // String id = oldItem?.id ?? "";
-      // String title = oldItem?.title ?? "";
+      SubscriptionPlan? selectedPlan;
+      String? selectedPlanPrice;
+      String? selectedPlanQuestion;
+      String? selectedPlanType;
+      List<String> selectedPlanFeatures = [];
 
       final SubscriptionProvider controller = context.watch();
 
       return Dialog(
         child: StatefulBuilder(
           builder: (context, setState) {
-            // final CategoryProvider categoryProvider = context.watch();
-            // updateColor(String val) {
-            //   setState(() {
-            //     selectedColor = val;
-            //   });
-            // }
+            void update() async {}
+            void changePlan(SubscriptionPlan? val) async {
+              if (val == null) return;
 
-            // void addCategory() async {
-            //   final check = await categoryProvider.updateCategory(
-            //     Category(
-            //       colorCode: selectedColor,
-            //       favoritesCount: favoritesCount,
-            //       id: id,
-            //       questionCount: questionCount,
-            //       title: title,
-            //       createdAt: oldItem?.createdAt ?? DateTime.now(),
-            //       updatedAt: oldItem?.updatedAt ?? DateTime.now(),
-            //     ),
-            //   );
-            //   if (check && context.mounted) {
-            //     Navigator.pop(context);
-            //   }
-            // }
+              setState(() {
+                selectedPlan = val;
+                selectedPlanPrice = val.pricePerMonth.toStringAsFixed(2);
+                selectedPlanQuestion = val.questionLimitPerDay < 1
+                    ? "Unlimited"
+                    : val.questionLimitPerDay.toString();
+                selectedPlanType = val.type;
+                selectedPlanFeatures = val.features;
+              });
+            }
 
             return Container(
               // height: 500,
@@ -99,7 +90,7 @@ void showEditPlanDialog({
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      prefixIcon: Icon(Icons.filter_alt_outlined),
+                      // prefixIcon: Icon(Icons.filter_alt_outlined),
                     ),
 
                     borderRadius: BorderRadius.circular(12),
@@ -113,7 +104,9 @@ void showEditPlanDialog({
                         )
                         .toList(),
 
-                    onChanged: (e) async {},
+                    onChanged: (e) async {
+                      changePlan(e);
+                    },
                   ),
 
                   vPad15,
@@ -124,7 +117,9 @@ void showEditPlanDialog({
                   ),
                   vPad10,
                   customInput(
-                    hintText: "",
+                    hintText: selectedPlanPrice ?? "",
+                    initialValue: selectedPlanPrice,
+                    formatter: FilteringTextInputFormatter.digitsOnly,
                     isEnable: (!controller.isLoading && !controller.isUpdating),
                     onChange: (e) {},
                   ),
@@ -137,8 +132,12 @@ void showEditPlanDialog({
                   ),
                   vPad10,
                   customInput(
-                    hintText: "",
-                    isEnable: (!controller.isLoading && !controller.isUpdating),
+                    hintText: selectedPlanQuestion ?? "",
+                    initialValue: selectedPlanQuestion,
+
+                    formatter: FilteringTextInputFormatter.digitsOnly,
+                    // isEnable: (!controller.isLoading && !controller.isUpdating),
+                    isEnable: false,
                     onChange: (e) {},
                   ),
                   vPad15,
@@ -150,15 +149,48 @@ void showEditPlanDialog({
                       ...List.generate(
                         controller.plans.length,
                         (ind) => Container(
-                          decoration: BoxDecoration(border: Border.all(),borderRadius: BorderRadius.circular(defaultRadius)),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color:
+                                  controller.plans[ind].type == selectedPlanType
+                                  ? primaryContainer
+                                  : customLightGrey,
+                            ),
+                            color: customWhite,
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            boxShadow:
+                                controller.plans[ind].type == selectedPlanType
+                                ? customShadow
+                                : null,
+                          ),
                           padding: EdgeInsets.all(defaultPadding),
                           child: Column(
+                            spacing: 10,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 height: 20,
                                 width: 140,
 
-                                decoration: BoxDecoration(color: primaryColor),
+                                decoration: BoxDecoration(
+                                  color:
+                                      controller.plans[ind].type ==
+                                          SubscriptionType.free.name
+                                      ? customGrey
+                                      : controller.plans[ind].type ==
+                                            SubscriptionType.standard.name
+                                      ? primaryColor
+                                      : null,
+                                  borderRadius: BorderRadius.circular(
+                                    defaultRadius,
+                                  ),
+                                  gradient:
+                                      controller.plans[ind].type ==
+                                          SubscriptionType.vip.name
+                                      ? LinearGradient(colors: vipGradient)
+                                      : null,
+                                ),
                               ),
 
                               Text(controller.plans[ind].title),
@@ -205,6 +237,17 @@ void showEditPlanDialog({
                             child: Center(child: Icon(Icons.add)),
                           ),
                         ],
+                      ),
+
+                      ...List.generate(
+                        selectedPlanFeatures.length,
+                        (i) => ListTile(
+                          title: Text(selectedPlanFeatures[i]),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.close),
+                          ),
+                        ),
                       ),
                     ],
                   ),

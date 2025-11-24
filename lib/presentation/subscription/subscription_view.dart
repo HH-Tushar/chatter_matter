@@ -2,6 +2,7 @@ import 'package:chatter_matter_admin/common/colors.dart';
 import 'package:chatter_matter_admin/common/custom_button.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -103,27 +104,14 @@ _subscriptionTile(SubscriptionPlan item) {
 
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: item.id == SubscriptionType.free.name
+                  color: item.type == SubscriptionType.free.name
                       ? customLightGrey
-                      : item.id == SubscriptionType.standard.name
+                      : item.type == SubscriptionType.standard.name
                       ? primaryColor
                       : null,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 4),
-                      color: customLightGrey,
-                      blurRadius: 4,
-                      spreadRadius: -6,
-                    ),
-                    BoxShadow(
-                      offset: Offset(0, 8),
-                      color: customLightGrey,
-                      blurRadius: 15,
-                      spreadRadius: -3,
-                    ),
-                  ],
+                  boxShadow:customShadow,
 
-                  gradient: item.id == SubscriptionType.vip.name
+                  gradient: item.type == SubscriptionType.vip.name
                       ? LinearGradient(colors: vipGradient)
                       : null,
                 ),
@@ -184,14 +172,14 @@ _subscriptionTile(SubscriptionPlan item) {
 
           vPad15,
           horizontalBar(
-            foregroundColor: item.id == SubscriptionType.free.name
+            foregroundColor: item.type == SubscriptionType.free.name
                 ? customGrey
                 : primaryColor,
             // title: "",
             value: item.activeUsers,
             totalUser: 1200,
             barHeight: 10,
-            gradient: item.id == SubscriptionType.vip.name ? vipGradient : [],
+            gradient: item.type == SubscriptionType.vip.name ? vipGradient : [],
           ),
         ],
       ),
