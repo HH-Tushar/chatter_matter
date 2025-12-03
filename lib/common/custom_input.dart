@@ -8,21 +8,42 @@ Widget customInput({
   String? initialValue,
   required bool isEnable,
   bool isBig = false,
+  bool applyBorder = false,
   TextInputFormatter? formatter,
   required Function(String)? onChange,
 }) {
   return TextFormField(
     enabled: isEnable,
     initialValue: initialValue,
-    minLines: isBig ? 4 : null,
-    maxLines: isBig ? 6 : null,
+    minLines: isBig ? 6 : null,
+    maxLines: isBig ? 10 : null,
     inputFormatters: formatter != null ? [formatter] : null,
     decoration: InputDecoration(
       hintText: hintText,
       filled: true,
       fillColor: Color(0xffF8F8F8),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: applyBorder
+            ? BorderSide(color: Colors.grey)
+            : isBig == false
+            ? BorderSide.none
+            : BorderSide(),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: applyBorder
+            ? BorderSide(color: Colors.grey)
+            : isBig == false
+            ? BorderSide.none
+            : BorderSide(),
+      ),
       border: OutlineInputBorder(
-        borderSide: isBig == false ? BorderSide.none : BorderSide(),
+        borderSide: applyBorder
+            ? BorderSide(color: Colors.grey)
+            : isBig == false
+            ? BorderSide.none
+            : BorderSide(),
         borderRadius: BorderRadius.circular(defaultRadius),
       ),
     ),

@@ -8,14 +8,15 @@ class PersonalSpace extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Profile Information"),
-        Text("Update your personal information"),
+        Text("Profile Information", style: titleMedium()),
+        Text("Update your personal information", style: bodyLarge()),
 
         vPad35,
         Text("Full Name"),
         vPad10,
         customInput(
           hintText: "Your name",
+          applyBorder: true,
           isEnable: true,
           onChange: (e) {},
           isBig: false,
@@ -24,6 +25,7 @@ class PersonalSpace extends StatelessWidget {
         Text("Email Address"),
         vPad10,
         customInput(
+          applyBorder: true,
           hintText: "Your email",
           isEnable: true,
           onChange: (e) {},
@@ -49,9 +51,12 @@ class PersonalSpace extends StatelessWidget {
         vPad35,
         Divider(),
         vPad35,
+        Text("password", style: titleMedium()),
+
         Text("Current Password"),
         vPad10,
         customInput(
+          applyBorder: true,
           hintText: "Your email",
           isEnable: true,
           onChange: (e) {},
@@ -61,6 +66,7 @@ class PersonalSpace extends StatelessWidget {
         Text("New Password"),
         vPad10,
         customInput(
+          applyBorder: true,
           hintText: "Your email",
           isEnable: true,
           onChange: (e) {},
@@ -70,6 +76,7 @@ class PersonalSpace extends StatelessWidget {
         Text("Confirm Password"),
         vPad10,
         customInput(
+          applyBorder: true,
           hintText: "Your email",
           isEnable: true,
           onChange: (e) {},

@@ -31,7 +31,7 @@ class _SettingViewState extends State<SettingView>
         vPad35,
         Container(
           height: 60,
-          width: 300,
+          width: 350,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
@@ -39,7 +39,7 @@ class _SettingViewState extends State<SettingView>
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            // mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // spacing: 10,
             children: [
               ElevatedButton(
@@ -54,7 +54,7 @@ class _SettingViewState extends State<SettingView>
                   disabledBackgroundColor: customWhite,
                   backgroundColor: Colors.grey.shade100,
                 ),
-                child: Text("4-10 Years", style: titleSmall()),
+                child: Text("Personal Space", style: titleSmall()),
               ),
               ElevatedButton(
                 onPressed: !isBaby
@@ -68,7 +68,7 @@ class _SettingViewState extends State<SettingView>
                   disabledBackgroundColor: customWhite,
                   backgroundColor: Colors.grey.shade100,
                 ),
-                child: Text("10+ Years", style: titleSmall()),
+                child: Text("Privacy Policy", style: titleSmall()),
               ),
             ],
           ),
@@ -76,7 +76,7 @@ class _SettingViewState extends State<SettingView>
 
         vPad20,
 
-        PersonalSpace(),
+        Expanded(child: SingleChildScrollView(child: PrivacyPolicy())),
       ],
     );
   }
