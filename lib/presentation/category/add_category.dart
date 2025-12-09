@@ -6,6 +6,7 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
     barrierDismissible: false,
     builder: (BuildContext context) {
       String selectedColor = oldItem?.colorCode ?? '';
+      String colorPalette = oldItem?.colorPalette ?? '';
       int favoritesCount = oldItem?.favoritesCount ?? 0;
       int questionCount = oldItem?.questionCount ?? 0;
       String id = oldItem?.id ?? "";
@@ -15,32 +16,52 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
         child: StatefulBuilder(
           builder: (context, setState) {
             final CategoryProvider categoryProvider = context.watch();
-            updateColor(String val) {
+            updateColor({required String val, required String cp}) {
               setState(() {
                 selectedColor = val;
+                colorPalette = cp;
               });
             }
 
             void addCategory() async {
-              final check = await categoryProvider.updateCategory(
-                Category(
-                  colorCode: selectedColor,
-                  favoritesCount: favoritesCount,
-                  id: id,
-                  questionCount: questionCount,
-                  title: title,
-                  createdAt: oldItem?.createdAt ?? DateTime.now(),
-                  updatedAt: oldItem?.updatedAt ?? DateTime.now(),
-                ),
-              );
-              if (check && context.mounted) {
+              bool check;
+
+              if (oldItem == null) {
+                check = await categoryProvider.addCategory(
+                  Category(
+                    colorCode: selectedColor,
+                    favoritesCount: favoritesCount,
+                    id: id,
+                    questionCount: questionCount,
+                    title: title,
+                    colorPalette: colorPalette,
+                    createdAt: oldItem?.createdAt ?? DateTime.now(),
+                    updatedAt: oldItem?.updatedAt ?? DateTime.now(),
+                  ),
+                );
+              } else {
+                check = await categoryProvider.updateCategory(
+                  Category(
+                    colorCode: selectedColor,
+                    favoritesCount: favoritesCount,
+                    id: id,
+                    questionCount: questionCount,
+                    title: title,
+                    colorPalette: colorPalette,
+                    createdAt: oldItem.createdAt ?? DateTime.now(),
+                    updatedAt: oldItem.updatedAt ?? DateTime.now(),
+                  ),
+                );
+              }
+
+              if (check == true && context.mounted) {
                 Navigator.pop(context);
               }
             }
 
             return Container(
               // height: 500,
-              width: 500,
+              width: 580,
               padding: EdgeInsets.all(defaultPadding * 1.5),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -113,16 +134,18 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                               tileColors.length,
                               (ind) => InkWell(
                                 onTap: () => updateColor(
-                                  tileColors[ind].value.toString(),
+                                  val: tileColors[ind].color.value.toString(),
+                                  cp: tileColors[ind].colorName,
                                 ),
                                 child: Container(
                                   height: 30,
                                   width: 30,
                                   decoration: BoxDecoration(
-                                    color: tileColors[ind],
+                                    color: tileColors[ind].color,
                                     borderRadius: BorderRadius.circular(10),
                                     border:
-                                        tileColors[ind].value.toString() ==
+                                        tileColors[ind].color.value
+                                                .toString() ==
                                             selectedColor
                                         ? Border.all(
                                             width: 2,

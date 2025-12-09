@@ -1,6 +1,8 @@
 // 1. Define the Routes
+import 'package:chatter_matter_admin/presentation/login.dart';
 import 'package:chatter_matter_admin/presentation/setting/setting_view.dart';
 import 'package:chatter_matter_admin/presentation/subscription/subscription_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,12 +24,27 @@ class CustomRoute {
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>();
 
-final router = GoRouter(initialLocation: '/home', routes: [shellRoute, auth]);
+final router = GoRouter(
+  initialLocation: '/auth',
+
+  // redirect: (context, state) {
+  //   final user = FirebaseAuth.instance.currentUser;
+
+  //   // If user is not logged in and not already on /auth, redirect to /auth
+  //   final loggingIn = state.uri.toString() == '/auth';
+  //   if (user == null && !loggingIn) {
+  //     return '/auth';
+  //   }
+  //   return null;
+  // },
+  routes: [shellRoute, auth],
+);
 
 //
 
 final shellRoute = ShellRoute(
   navigatorKey: _shellNavigatorKey,
+
   builder: (context, state, child) {
     return LandingView(child: child);
   },
@@ -67,14 +84,4 @@ final shellRoute = ShellRoute(
   ],
 );
 
-final auth = GoRoute(path: "/auth", builder: (context, state) => Placeholder());
-
-
-
-
-
-
-
-
-
-
+final auth = GoRoute(path: "/auth", builder: (context, state) => LoginView());

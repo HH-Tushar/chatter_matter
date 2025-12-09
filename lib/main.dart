@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
+import 'application/firebase/firebase_config.dart';
 import 'provider/category_provider.dart';
 import 'provider/dashboard_provider.dart';
 import 'provider/subscription_provider.dart';
 import 'router.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseConfig.initialize();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
