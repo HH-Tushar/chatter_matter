@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:chatter_matter_admin/core/api_handler.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 
+import '../../core/api_handler.dart';
 import '../../env.dart';
-import '../model/category_model.dart';
+import '../model/question_model.dart';
 
-class CategoryRepo {
-
-  
-  Future<Attempt<Category>> addCategory(
-    Category category, // example: https://yourapi.com/api
+class QuestionRepo {
+  //add question
+  Future<Attempt<QuestionModelList>> addQuestions(
+    QuestionModelList questions, // example: https://yourapi.com/api
   ) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -18,9 +18,9 @@ class CategoryRepo {
 
       final token = await user.getIdToken();
 
-      final url = Uri.parse("$baseUrl/addCategory");
+      final url = Uri.parse("$baseUrl/addQuestions");
 
-      final body = jsonEncode(category.toJson());
+      final body = jsonEncode(questions.toJson());
 
       final response = await http
           .post(
@@ -34,7 +34,7 @@ class CategoryRepo {
           .timeout(const Duration(seconds: 10)); // Prevents infinite waiting
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return success(Category.fromJson(jsonDecode(response.body)["data"]));
+        return success(QuestionModelList.fromJson(jsonDecode(response.body)));
       } else if (response.statusCode == 401) {
         return failed(SessionExpired());
       } else if (response.statusCode == 403) {
@@ -50,16 +50,26 @@ class CategoryRepo {
     }
   }
 
+  //get question paginator
 
-
-  Future<Attempt<CategoryList>> getCategoryList() async {
+  Future<Attempt<QuestionModelList>> getQuestionPaginator({
+    required String? pageToken,
+    int limit = 10,
+    required bool isBabyQuestion,
+    required String categoryId,
+  }) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return failed(SessionExpired());
 
       final token = await user.getIdToken();
 
-      final url = Uri.parse("$baseUrl/categoryList");
+      String uri =
+          "$baseUrl/getQuestionPaginator?categoryId=$categoryId&isBabyQuestion=$isBabyQuestion&limit=$limit";
+      if (pageToken != null && pageToken.isNotEmpty) {
+        uri = "$uri&pageToken=$pageToken";
+      }
+      final url = Uri.parse(uri);
 
       final response = await http
           .get(
@@ -72,7 +82,7 @@ class CategoryRepo {
           .timeout(const Duration(seconds: 10)); // Prevents infinite waiting
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return success(CategoryList.fromJson(jsonDecode(response.body)));
+        return success(QuestionModelList.fromJson(jsonDecode(response.body)));
       } else if (response.statusCode == 401) {
         return failed(SessionExpired());
       } else if (response.statusCode == 403) {

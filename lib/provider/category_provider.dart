@@ -58,4 +58,12 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+
+
+Future<void> getQuestion()async{
+
+  // http://127.0.0.1:5001/demo-no-project/us-central1/api/getQuestionPaginator?categoryId=cat001&limit=10&pageToken=lololo
+}
+
 }

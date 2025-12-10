@@ -1,21 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionModelList {
-  final bool success;
+  // final bool success;
+  final int count;
+  String? pageToken;
   final List<QuestionModel> data;
 
-  QuestionModelList({required this.success, required this.data});
+  QuestionModelList({
+    required this.count,
+    required this.pageToken,
+    required this.data,
+  });
 
   factory QuestionModelList.fromJson(Map<String, dynamic> json) =>
       QuestionModelList(
-        success: json["success"],
+        count: json["count"] ?? 0,
+        pageToken: json["pageToken"] ?? "",
         data: List<QuestionModel>.from(
           json["data"].map((x) => QuestionModel.fromJson(x)),
         ),
       );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
+    // "success": success,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }

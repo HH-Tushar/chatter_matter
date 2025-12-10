@@ -1,7 +1,31 @@
 part of 'question_list_view.dart';
 
-void showAddQuestionDialog({required BuildContext context}) {
+void showAddQuestionDialog({
+  required BuildContext context,
+  required Category category,
+}) {
   List<String> questions = [];
+
+  bool isBaby = false;
+  bool isLoading = false;
+  final QuestionRepo questionRepo = QuestionRepo();
+
+  List<QuestionModel> make() {
+    List<QuestionModel> temp = [];
+    questions.forEach(
+      (element) => temp.add(
+        QuestionModel(
+          id: "",
+          title: element,
+          favoritesCount: 0,
+          isBabyQuestion: isBaby,
+          categoryId: category.id,
+        ),
+      ),
+    );
+
+    return temp;
+  }
 
   showDialog(
     context: context,
@@ -9,40 +33,25 @@ void showAddQuestionDialog({required BuildContext context}) {
     fullscreenDialog: false,
     useSafeArea: true,
     builder: (BuildContext context) {
-      bool isBaby = false;
-
-      // String selectedColor = oldItem?.colorCode ?? '';
-      // int favoritesCount = oldItem?.favoritesCount ?? 0;
-      // int questionCount = oldItem?.questionCount ?? 0;
-      // String id = oldItem?.id ?? "";
-      // String title = oldItem?.title ?? "";
-
       return Dialog(
         child: StatefulBuilder(
           builder: (context, setState) {
-            // final CategoryProvider categoryProvider = context.watch();
-            // updateColor(String val) {
-            //   setState(() {
-            //     selectedColor = val;
-            //   });
-            // }
+            //upload question
+            void upload() async {
+              setState(() {
+                isLoading = true;
+              });
 
-            // void addCategory() async {
-            //   final check = await categoryProvider.updateCategory(
-            //     Category(
-            //       colorCode: selectedColor,
-            //       favoritesCount: favoritesCount,
-            //       id: id,
-            //       questionCount: questionCount,
-            //       title: title,
-            //       createdAt: oldItem?.createdAt ?? DateTime.now(),
-            //       updatedAt: oldItem?.updatedAt ?? DateTime.now(),
-            //     ),
-            //   );
-            //   if (check && context.mounted) {
-            //     Navigator.pop(context);
-            //   }
-            // }
+              final (data, error) = await questionRepo.addQuestions(
+                QuestionModelList(count: 0, pageToken: "", data: make()),
+              );
+
+              print(data);
+              print(error?.title);
+              setState(() {
+                isLoading = false;
+              });
+            }
 
             return Container(
               height: 700,
@@ -68,16 +77,18 @@ void showAddQuestionDialog({required BuildContext context}) {
                             style: titleLarge(color: customBlack),
                           ),
                           Text(
-                            "Create questions for 'Category name'",
+                            "Create questions for ${category.title}",
                             style: bodyLarge(fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
 
                       IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                Navigator.pop(context);
+                              },
                         icon: Icon(Icons.close),
                       ),
                     ],
@@ -194,7 +205,7 @@ void showAddQuestionDialog({required BuildContext context}) {
                       Expanded(
                         child: customOutlineButton(
                           bg: customPurple,
-                          isLoading: false,
+                          isLoading: isLoading,
                           onTap: () => Navigator.pop(context),
                           title: "Cancel",
                         ),
@@ -202,8 +213,10 @@ void showAddQuestionDialog({required BuildContext context}) {
                       Expanded(
                         child: customFilledButton(
                           bg: customPurple,
-                          isLoading: false,
-                          onTap: () {},
+                          isLoading: isLoading,
+                          onTap: () {
+                            upload();
+                          },
                           title: "Add Question",
                         ),
                       ),

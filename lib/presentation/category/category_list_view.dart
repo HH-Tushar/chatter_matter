@@ -113,7 +113,10 @@ class CategoryListView extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 color: Color(int.parse(item.colorCode)),
                 child: MaterialButton(
-                  onPressed: () => context.go(CustomRoute.question),
+                  onPressed: () => context.go(
+                    "${CustomRoute.question}/${controller.categoryList[index].id}",
+                    // extra: controller.categoryList[index],
+                  ),
                   child: Padding(
                     padding: EdgeInsets.all(16),
                     child: Row(
