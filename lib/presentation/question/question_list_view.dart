@@ -145,6 +145,8 @@ class _QuestionListViewState extends State<QuestionListView> {
                                 ? null
                                 : () => setState(() {
                                     isBaby = true;
+                                    questionModelList = null;
+                                    fetchQuestions();
                                   }),
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
@@ -159,6 +161,8 @@ class _QuestionListViewState extends State<QuestionListView> {
                                 ? null
                                 : () => setState(() {
                                     isBaby = false;
+                                    questionModelList = null;
+                                    fetchQuestions();
                                   }),
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
