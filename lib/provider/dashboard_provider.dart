@@ -1,11 +1,26 @@
+import 'package:chatter_matter_admin/application/model/dashboard_stats.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 
 import '../application/firebase/firebase_config.dart';
+import '../application/repo/dashboard_repo.dart';
 
 class DashboardProvider extends ChangeNotifier {
-  String? token;
-  User? _user;
+  DashboardProvider() {
+    // retrieveUser();
+  }
+
+  final _dashboardRepo = DashboardRepo();
+
+  DashboardStatus? dashboardStatus;
+
+  Future<bool> retrieveUser() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (dashboardStatus == null) {
+      await getDashboardStats();
+    }
+    return user == null ? false : true;
+  }
 
   Future<String?> loginAndGetToken({
     required String email,
@@ -18,13 +33,10 @@ class DashboardProvider extends ChangeNotifier {
       final user = userCredential.user;
 
       if (user != null) {
-        final idToken = await user.getIdToken();
-
-        _user = user;
-        token = idToken;
         print('Logged in as ${user.email}');
         notifyListeners();
-        return idToken;
+        await getDashboardStats();
+        return "User login successfully";
       }
       return null;
     } catch (e) {
@@ -32,5 +44,11 @@ class DashboardProvider extends ChangeNotifier {
       print('Login failed: ${e.toString()}');
       return null;
     }
+  }
+
+  Future<void> getDashboardStats() async {
+    final (data, error) = await _dashboardRepo.getDashboardStats();
+    dashboardStatus = data;
+    notifyListeners();
   }
 }

@@ -1,5 +1,7 @@
+import 'package:chatter_matter_admin/provider/dashboard_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../common/app_bar.dart';
@@ -19,6 +21,8 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DashboardProvider dashboardProvider = context.watch();
+    final status = dashboardProvider.dashboardStatus;
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -47,14 +51,13 @@ class HomeView extends StatelessWidget {
                   : (maxWidth > 800)
                   ? 220 // medium screens
                   : 150; // small screens
-              print(maxWidth);
               return Wrap(
                 spacing: defaultPadding,
                 runSpacing: defaultPadding,
                 children: [
                   topTile(
                     title: "Total Users",
-                    value: "50,000",
+                    value: "${status?.totalUsers ?? 0}",
                     backgroundIcon: "assets/dashboard/questions_bg.svg",
                     foregroundIcon: "assets/dashboard/total_users.svg",
                     isPrimary: true,
@@ -71,7 +74,7 @@ class HomeView extends StatelessWidget {
                   ),
                   topTile(
                     title: "Total Question",
-                    value: "50,000",
+                    value: "${status?.totalQuestions ?? 0}",
                     backgroundIcon: "assets/dashboard/questions_bg.svg",
                     foregroundIcon: "assets/dashboard/question.svg",
                     isPrimary: false,
@@ -79,7 +82,8 @@ class HomeView extends StatelessWidget {
                   ),
                   topTile(
                     title: "Subscription",
-                    value: "50,000",
+                    value:
+                        "${(status?.totalVipUsers ?? 0) + (status?.totalStandardUsers ?? 0)}",
                     backgroundIcon: "assets/dashboard/subscription_bg.svg",
                     foregroundIcon: "assets/dashboard/subscription.svg",
                     isPrimary: false,
@@ -104,14 +108,35 @@ class HomeView extends StatelessWidget {
                 return Row(
                   spacing: 20,
                   children: [
-                    Expanded(child: subscriptionLayout()),
-                    Expanded(child: quickStartLayout()),
+                    Expanded(
+                      child: subscriptionLayout(
+                        freeUser: status?.totalFreeUsers ?? 0,
+                        standardUser: status?.totalStandardUsers ?? 0,
+                        vipUser: status?.totalVipUsers ?? 0,
+                      ),
+                    ),
+                    Expanded(
+                      child: quickStartLayout(
+                        favQuestions: status?.favCount ?? 0,
+                        totalQuestion: status?.totalQuestions ?? 0,
+                      ),
+                    ),
                   ],
                 );
               } else {
                 return Column(
                   spacing: 20,
-                  children: [subscriptionLayout(), quickStartLayout()],
+                  children: [
+                    subscriptionLayout(
+                      freeUser: status?.totalFreeUsers ?? 0,
+                      standardUser: status?.totalStandardUsers ?? 0,
+                      vipUser: status?.totalVipUsers ?? 0,
+                    ),
+                    quickStartLayout(
+                      favQuestions: status?.favCount ?? 0,
+                      totalQuestion: status?.totalQuestions ?? 0,
+                    ),
+                  ],
                 );
               }
             },

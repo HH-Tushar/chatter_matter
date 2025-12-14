@@ -11,6 +11,7 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
       int questionCount = oldItem?.questionCount ?? 0;
       String id = oldItem?.id ?? "";
       String title = oldItem?.title ?? "";
+      String subTitle = oldItem?.subTitle ?? "";
 
       return Dialog(
         child: StatefulBuilder(
@@ -35,6 +36,7 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                     questionCount: questionCount,
                     title: title,
                     colorPalette: colorPalette,
+                    subTitle: subTitle,
                     createdAt: oldItem?.createdAt ?? DateTime.now(),
                     updatedAt: oldItem?.updatedAt ?? DateTime.now(),
                   ),
@@ -47,6 +49,7 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                     id: id,
                     questionCount: questionCount,
                     title: title,
+                    subTitle: subTitle,
                     colorPalette: colorPalette,
                     createdAt: oldItem.createdAt ?? DateTime.now(),
                     updatedAt: oldItem.updatedAt ?? DateTime.now(),
@@ -163,92 +166,22 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                   ),
                   vPad20,
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Add Question",
-                        style: titleSmall(fontWeight: FontWeight.w600),
-                      ),
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: customBlack,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onPressed: () {},
-                        label: Text(
-                          "Add",
-                          style: bodyMedium(color: customWhite),
-                        ),
-                        icon: Icon(Icons.add, color: customWhite),
-                      ),
-                    ],
-                  ),
-                  vPad10,
-
-                  Column(
-                    children: [
-                      Row(
-                        spacing: 10,
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter your question",
-                                filled: true,
-                                fillColor: Color(0xffF8F8F8),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(
-                                    defaultRadius,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          MaterialButton(
-                            height: 56,
-                            minWidth: 50,
-                            elevation: 1,
-                            color: Colors.red.shade100,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-
-                            onPressed: () {},
-
-                            child: Center(
-                              child: Icon(Icons.delete, color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
                   vPad20,
 
-                  Row(
-                    spacing: 5,
-                    children: [
-                      Checkbox(
-                        activeColor: customBlack,
-                        value: true,
-                        onChanged: (e) {},
-                      ),
-
-                      Text(
-                        "Age between 4-10 Years",
-                        style: bodyMedium(
-                          fontWeight: FontWeight.w500,
-                          color: customBlack,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    "Sub Title",
+                    style: titleSmall(fontWeight: FontWeight.w600),
                   ),
+                  vPad10,
+                  customInput(
+                    hintText: "sub title..",
+                    initialValue: subTitle,
+                    isBig: true,
+                    onChange: (e) => subTitle = e,
+                    isEnable: !categoryProvider.isAddingCategory,
+                  ),
+
+                  vPad15,
 
                   vPad20,
 

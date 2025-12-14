@@ -4,10 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../env.dart';
-import '../model/category_model.dart';
+import '../model/dashboard_stats.dart';
 
 class DashboardRepo {
-  Future<Attempt<Category>> getDashboardStats() async {
+
+
+
+
+  Future<Attempt<DashboardStatus>> getDashboardStats() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return failed(SessionExpired());
@@ -27,7 +31,7 @@ class DashboardRepo {
           .timeout(const Duration(seconds: 10)); // Prevents infinite waiting
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return success(Category.fromJson(jsonDecode(response.body)["data"]));
+        return success(DashboardStatus.fromJson(jsonDecode(response.body)));
       } else if (response.statusCode == 401) {
         return failed(SessionExpired());
       } else if (response.statusCode == 403) {

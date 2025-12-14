@@ -35,6 +35,7 @@ class Category {
   final String id;
   final String title;
   final String colorPalette;
+  final String subTitle;
   final String colorCode;
   final int questionCount;
   final int favoritesCount;
@@ -48,6 +49,7 @@ class Category {
     required this.colorCode,
     required this.questionCount,
     required this.favoritesCount,
+    required this.subTitle,
     this.createdAt,
     this.updatedAt,
   });
@@ -61,6 +63,7 @@ class Category {
     return Category(
       id: doc.id,
       title: data?['title'] ?? '',
+      subTitle: data?['subTitle'] ?? '',
       colorCode: data?['colorCode'] ?? '#FFFFFF',
       questionCount: data?['questionCount'] ?? 0,
       favoritesCount: data?['favoritesCount'] ?? 0,
@@ -80,6 +83,7 @@ factory Category.fromJson(Map<String, dynamic> json, {String? id}) {
     id: id ?? json['id'] ?? '',
 
     title: json['title'] ?? '',
+    subTitle: json['subTitle'] ?? '',
     colorPalette: json['colorPalette'] ?? '',
     colorCode: json['colorCode'] ?? '#FFFFFF',
 
@@ -106,7 +110,7 @@ factory Category.fromJson(Map<String, dynamic> json, {String? id}) {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      // 'icon': icon,
+      'subTitle': subTitle,
       'colorCode': colorCode,
       'colorPalette': colorPalette,
       'questionCount': questionCount,

@@ -1,9 +1,14 @@
 part of '../home_view.dart';
 
-
-
-
-Widget subscriptionLayout() {
+Widget subscriptionLayout({
+  required int freeUser,
+  required int standardUser,
+  required int vipUser,
+}) {
+  int totalUser = freeUser + standardUser + vipUser;
+  if (totalUser < 1) {
+    totalUser = 1;
+  }
   return Container(
     height: 330,
     decoration: BoxDecoration(
@@ -43,22 +48,22 @@ Widget subscriptionLayout() {
         horizontalBar(
           foregroundColor: customGrey.withAlpha(150),
           title: "Free Plan",
-          totalUser: 2000,
-          value: 150,
+          totalUser: totalUser,
+          value: freeUser,
           gradient: [],
         ),
         horizontalBar(
           foregroundColor: primaryColor,
           title: "Standard Plan",
-          totalUser: 2000,
-          value: 150,
+          totalUser: totalUser,
+          value: standardUser,
           gradient: [],
         ),
         horizontalBar(
           foregroundColor: primaryColor,
           title: "VIP Unlimited",
-          totalUser: 2000,
-          value: 1500,
+          totalUser: totalUser,
+          value: vipUser,
           gradient: [primaryContainer, customYellow],
         ),
       ],

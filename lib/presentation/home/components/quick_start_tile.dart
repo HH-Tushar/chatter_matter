@@ -1,6 +1,14 @@
 part of '../home_view.dart';
 
-Widget quickStartLayout() {
+Widget quickStartLayout({
+  required int totalQuestion,
+  required int favQuestions,
+}) {
+  double percentage = 0;
+  if (favQuestions > 0 && totalQuestion > 0) {
+    percentage = ((totalQuestion / favQuestions) * 100);
+  }
+
   return Container(
     height: 330,
 
@@ -27,19 +35,19 @@ Widget quickStartLayout() {
         _quickTile(
           color: primaryColor,
           title: "Total Questions",
-          value: "450",
+          value: formatNumberWithComa(totalQuestion),
           icon: Icons.chat_bubble_outline,
         ),
         _quickTile(
           color: Colors.red,
-          title: "Total Questions",
-          value: "450",
+          title: "Favorite Questions",
+          value: formatNumberWithComa(favQuestions),
           icon: Icons.favorite_border,
         ),
         _quickTile(
           color: customBlue,
-          title: "Total Questions",
-          value: formatNumberWithComa(1500),
+          title: "Favorite Percentage",
+          value: "$percentage%",
           icon: Icons.show_chart,
         ),
       ],

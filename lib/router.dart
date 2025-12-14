@@ -2,12 +2,10 @@
 import 'package:chatter_matter_admin/presentation/login.dart';
 import 'package:chatter_matter_admin/presentation/setting/setting_view.dart';
 import 'package:chatter_matter_admin/presentation/subscription/subscription_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'application/model/category_model.dart';
 import 'presentation/category/category_list_view.dart';
 import 'presentation/home/home_view.dart';
 import 'presentation/landing/landing_view.dart';
@@ -30,12 +28,12 @@ final GlobalKey<NavigatorState> _shellNavigatorKey =
 final router = GoRouter(
   initialLocation: '/home',
 
-  redirect: (context, state) {
-    final token = Provider.of<DashboardProvider>(context, listen: false).token;
+  redirect: (context, state) async{
+    final token = await Provider.of<DashboardProvider>(context, listen: false).retrieveUser();
 
     // If user is not logged in and not already on /auth, redirect to /auth
     final loggingIn = state.uri.toString() == '/auth';
-    if (token == null && !loggingIn) {
+    if (token == false && !loggingIn) {
       return '/auth';
     }
     return null;
