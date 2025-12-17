@@ -109,7 +109,7 @@ class _UserListViewState extends State<UserListView>
             ),
           ],
         ),
-
+        vPad15,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Row(

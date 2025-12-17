@@ -6,13 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../application/model/category_model.dart';
 import '../../application/model/subscription_model.dart';
-import '../../application/repo/subscription_data.dart';
 import '../../common/app_bar.dart';
 import '../../common/custom_bar.dart';
 import '../../common/custom_input.dart';
 import '../../common/padding.dart';
 import '../../env.dart';
+import '../../provider/category_provider.dart';
 import '../../provider/subscription_provider.dart';
 part 'edit_plan.dart';
 
@@ -21,6 +22,7 @@ class SubscriptionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SubscriptionProvider subscriptionProvider = context.watch();
     return Column(
       children: [
         customAppBar(
@@ -53,8 +55,8 @@ class SubscriptionView extends StatelessWidget {
                   runSpacing: 20,
                   children: [
                     ...List.generate(
-                      subscriptionPlans.length,
-                      (i) => _subscriptionTile(subscriptionPlans[i]),
+                      subscriptionProvider.plans.length,
+                      (i) => _subscriptionTile(subscriptionProvider.plans[i]),
                     ),
                   ],
                 ),
@@ -67,7 +69,7 @@ class SubscriptionView extends StatelessWidget {
   }
 }
 
-_subscriptionTile(SubscriptionPlan item) {
+_subscriptionTile(SubscriptionPackageModel item) {
   return ConstrainedBox(
     constraints: BoxConstraints(minWidth: 370, maxWidth: 375, minHeight: 400),
     child: Container(
@@ -84,7 +86,7 @@ _subscriptionTile(SubscriptionPlan item) {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.title, style: titleLarge(color: customBlack)),
+                  Text(item.packageName, style: titleLarge(color: customBlack)),
                   Row(
                     children: [
                       Text(
@@ -104,14 +106,14 @@ _subscriptionTile(SubscriptionPlan item) {
 
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: item.type == SubscriptionType.free.name
+                  color: item.packageType == SubscriptionType.free.name
                       ? customLightGrey
-                      : item.type == SubscriptionType.standard.name
+                      : item.packageType == SubscriptionType.standard.name
                       ? primaryColor
                       : null,
-                  boxShadow:customShadow,
+                  boxShadow: customShadow,
 
-                  gradient: item.type == SubscriptionType.vip.name
+                  gradient: item.packageType == SubscriptionType.vip.name
                       ? LinearGradient(colors: vipGradient)
                       : null,
                 ),
@@ -172,14 +174,16 @@ _subscriptionTile(SubscriptionPlan item) {
 
           vPad15,
           horizontalBar(
-            foregroundColor: item.type == SubscriptionType.free.name
+            foregroundColor: item.packageType == SubscriptionType.free.name
                 ? customGrey
                 : primaryColor,
             // title: "",
             value: item.activeUsers,
             totalUser: 1200,
             barHeight: 10,
-            gradient: item.type == SubscriptionType.vip.name ? vipGradient : [],
+            gradient: item.packageType == SubscriptionType.vip.name
+                ? vipGradient
+                : [],
           ),
         ],
       ),

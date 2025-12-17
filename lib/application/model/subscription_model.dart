@@ -1,51 +1,76 @@
-class SubscriptionPlan {
+// models/package_model.dart
+
+class SubscriptionPackageList {
+  final bool success;
+  final List<SubscriptionPackageModel> data;
+
+  SubscriptionPackageList({required this.success, required this.data});
+
+  factory SubscriptionPackageList.fromJson(Map<String, dynamic> json) =>
+      SubscriptionPackageList(
+        success: json["success"],
+        data: List<SubscriptionPackageModel>.from(
+          json["data"].map((x) => SubscriptionPackageModel.fromJson(x)),
+        ),
+      );
+}
+
+class SubscriptionPackageModel {
   final String id;
-  final String title;
-  final String type; // "free", "basic", "pro"
+  final String packageName;
   final double pricePerMonth;
-  final List<String> features; 
+  final int questions;
   final int activeUsers;
+  final String packageType; // or use enum if you have SubscriptionType in Dart
+  final List<String> categoryIds;
+  final List<String> features;
 
-  final int questionLimitPerDay; // ex: 1
-  final bool adsIncluded;
-  final bool isPopular; 
+  final String createdAt;
+  final String updatedAt;
 
-  SubscriptionPlan({
+  SubscriptionPackageModel({
     required this.id,
-    required this.title,
-    required this.pricePerMonth,
-    required this.type,
-    required this.features,
+    required this.packageName,
     required this.activeUsers,
-    required this.questionLimitPerDay,
-    required this.adsIncluded,
-    this.isPopular = false,
+    required this.pricePerMonth,
+    required this.questions,
+    required this.packageType,
+    required this.categoryIds,
+    required this.features,
+
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  factory SubscriptionPlan.fromMap(Map<String, dynamic> map, String docId) {
-    return SubscriptionPlan(
-      id: docId,
-      title: map['title'] ?? "",
-      pricePerMonth: (map['pricePerMonth'] ?? 0).toDouble(),
-      type: map['type'] ?? "",
-      features: List<String>.from(map['features'] ?? []),
-      activeUsers: map['activeUsers'] ?? 0,
-      questionLimitPerDay: map['questionLimitPerDay'] ?? 0,
-      adsIncluded: map['adsIncluded'] ?? false,
-      isPopular: map['isPopular'] ?? false,
+  // Factory constructor to create from JSON
+  factory SubscriptionPackageModel.fromJson(Map<String, dynamic> json) {
+    return SubscriptionPackageModel(
+      id: json['id'] as String,
+      packageName: json['packageName'] as String,
+      pricePerMonth: (json['pricePerMonth'] as num).toDouble(),
+      questions: json['questions'] as int,
+      packageType: json['packageType'] as String,
+      categoryIds: List<String>.from(json['categoryIds'] ?? []),
+      features: List<String>.from(json['features'] ?? []),
+
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
+      activeUsers: json['activeUsers'] ?? 0,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  // Convert object to JSON
+  Map<String, dynamic> toJson() {
     return {
-      "title": title,
-      "pricePerMonth": pricePerMonth,
-      "type": type,
-      "features": features,
-      "activeUsers": activeUsers,
-      "questionLimitPerDay": questionLimitPerDay,
-      "adsIncluded": adsIncluded,
-      "isPopular": isPopular,
+      'id': id,
+      'packageName': packageName,
+      'pricePerMonth': pricePerMonth,
+      'questions': questions,
+      'packageType': packageType,
+      'categoryIds': categoryIds,
+      'features': features,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 }

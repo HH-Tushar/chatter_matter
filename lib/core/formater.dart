@@ -97,3 +97,12 @@ String timeAgo(DateTime dateTime) {
     return "${years}y ago";
   }
 }
+
+
+
+
+
+
+String removeLineBreaks(String text) {
+  return text.replaceAll(RegExp(r'[\r\n]+'), ' ');
+}

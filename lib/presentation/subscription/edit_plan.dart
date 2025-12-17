@@ -8,31 +8,38 @@ void showEditPlanDialog({
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      SubscriptionPlan? selectedPlan;
+      SubscriptionPackageModel? selectedPlan;
       String? selectedPlanPrice;
       String? selectedPlanQuestion;
       String? selectedPlanType;
       List<String> selectedPlanFeatures = [];
+      List<String> selectedCategories = [];
 
       final SubscriptionProvider controller = context.watch();
+      final CategoryProvider categoryProvider = context.watch();
 
       return Dialog(
         child: StatefulBuilder(
           builder: (context, setState) {
             void update() async {}
-            void changePlan(SubscriptionPlan? val) async {
+
+            void changePlan(SubscriptionPackageModel? val) async {
               if (val == null) return;
 
               setState(() {
                 selectedPlan = val;
                 selectedPlanPrice = val.pricePerMonth.toStringAsFixed(2);
-                selectedPlanQuestion = val.questionLimitPerDay < 1
+                selectedPlanQuestion = val.questions < 1
                     ? "Unlimited"
-                    : val.questionLimitPerDay.toString();
-                selectedPlanType = val.type;
+                    : val.questions.toString();
+                selectedPlanType = val.packageType;
                 selectedPlanFeatures = val.features;
+                selectedCategories = val.categoryIds;
               });
             }
+
+            void addFeature() {}
+            void addCategory() {}
 
             return Container(
               // height: 500,
@@ -81,7 +88,7 @@ void showEditPlanDialog({
                   ),
                   vPad10,
 
-                  DropdownButtonFormField<SubscriptionPlan>(
+                  DropdownButtonFormField<SubscriptionPackageModel>(
                     icon: Icon(Icons.keyboard_arrow_down_outlined),
                     decoration: InputDecoration(
                       filled: true,
@@ -99,13 +106,48 @@ void showEditPlanDialog({
                         .map(
                           (item) => DropdownMenuItem(
                             value: item,
-                            child: Text(item.title),
+                            child: Text(item.packageName),
                           ),
                         )
                         .toList(),
 
                     onChanged: (e) async {
                       changePlan(e);
+                    },
+                  ),
+
+                  vPad15,
+                  Text(
+                    "Select Categories",
+                    style: titleSmall(fontWeight: FontWeight.w600),
+                  ),
+                  vPad10,
+
+                  DropdownButtonFormField<Category>(
+                    icon: Icon(Icons.keyboard_arrow_down_outlined),
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: "Select Category",
+                      fillColor: customWhite,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      // prefixIcon: Icon(Icons.filter_alt_outlined),
+                    ),
+
+                    borderRadius: BorderRadius.circular(12),
+
+                    items: categoryProvider.categoryList
+                        .map(
+                          (item) => DropdownMenuItem(
+                            value: item,
+                            child: Text(item.title),
+                          ),
+                        )
+                        .toList(),
+
+                    onChanged: (e) async {
+                      // changePlan(e);
                     },
                   ),
 
@@ -153,14 +195,16 @@ void showEditPlanDialog({
                             border: Border.all(
                               width: 2,
                               color:
-                                  controller.plans[ind].type == selectedPlanType
+                                  controller.plans[ind].packageType ==
+                                      selectedPlanType
                                   ? primaryContainer
                                   : customLightGrey,
                             ),
                             color: customWhite,
                             borderRadius: BorderRadius.circular(defaultRadius),
                             boxShadow:
-                                controller.plans[ind].type == selectedPlanType
+                                controller.plans[ind].packageType ==
+                                    selectedPlanType
                                 ? customShadow
                                 : null,
                           ),
@@ -175,10 +219,10 @@ void showEditPlanDialog({
 
                                 decoration: BoxDecoration(
                                   color:
-                                      controller.plans[ind].type ==
+                                      controller.plans[ind].packageType ==
                                           SubscriptionType.free.name
                                       ? customGrey
-                                      : controller.plans[ind].type ==
+                                      : controller.plans[ind].packageType ==
                                             SubscriptionType.standard.name
                                       ? primaryColor
                                       : null,
@@ -186,14 +230,14 @@ void showEditPlanDialog({
                                     defaultRadius,
                                   ),
                                   gradient:
-                                      controller.plans[ind].type ==
+                                      controller.plans[ind].packageType ==
                                           SubscriptionType.vip.name
                                       ? LinearGradient(colors: vipGradient)
                                       : null,
                                 ),
                               ),
 
-                              Text(controller.plans[ind].title),
+                              Text(controller.plans[ind].packageName),
                             ],
                           ),
                         ),
@@ -272,7 +316,7 @@ void showEditPlanDialog({
                           isLoading:
                               (controller.isUpdating || controller.isUpdating),
                           onTap: () => Navigator.pop(context),
-                          title: "Add Category",
+                          title: "Update Plan",
                         ),
                       ),
                     ],

@@ -13,6 +13,7 @@ import '../../common/app_bar.dart';
 import '../../common/custom_button.dart';
 import '../../common/custom_formatter.dart';
 import '../../common/custom_input.dart';
+import '../../core/formater.dart';
 import '../../provider/category_provider.dart';
 
 part 'add_category.dart';
@@ -124,7 +125,6 @@ class CategoryListView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Column(
-                            spacing: 12,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -134,7 +134,11 @@ class CategoryListView extends StatelessWidget {
                                   color: customWhite,
                                 ),
                               ),
-
+                              Text(
+                                item.subTitle.trim(),
+                                style: bodyMedium(color: customWhite),
+                              ),
+                              vPad10,
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
