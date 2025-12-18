@@ -1,12 +1,18 @@
 part of 'user_list_view.dart';
 
 class _UserRow extends StatelessWidget {
-  const _UserRow({super.key, required this.onManage, required this.onView});
+  const _UserRow({
+    super.key,
+    required this.onManage,
+    required this.onView,
+    required this.user,
+  });
   final VoidCallback onManage;
   final VoidCallback onView;
+  final AppUser user;
   @override
   Widget build(BuildContext context) {
-    final subscription = _subscriptionTile("VIP Unlimited");
+    final subscription = _subscriptionTile(user.subscriptionType);
     return Card(
       color: customWhite,
       shape: RoundedRectangleBorder(
@@ -22,12 +28,12 @@ class _UserRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("User name"),
+                  Text(user.name),
                   Row(
                     spacing: 5,
                     children: [
                       Icon(Icons.email_outlined, size: 15),
-                      Text("email"),
+                      Text(user.email),
                     ],
                   ),
                 ],
@@ -132,13 +138,13 @@ Widget _subscriptionTile(String title) {
     alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: defaultPadding, vertical: 6),
     decoration: BoxDecoration(
-      color: title == "Free"
+      color: title == "free"
           ? Color(0xffBDBDBD)
-          : title == "Standard"
+          : title == "standard"
           ? primaryContainer
           : null,
-      gradient: title == "VIP Unlimited"
-          ? LinearGradient(colors:vipGradient)
+      gradient: title == "vip"
+          ? LinearGradient(colors: vipGradient)
           : null,
       borderRadius: BorderRadius.circular(defaultRadius),
     ),

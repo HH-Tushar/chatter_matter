@@ -9,6 +9,7 @@ void showEditPlanDialog({
     barrierDismissible: false,
     builder: (BuildContext context) {
       SubscriptionPackageModel? selectedPlan;
+
       String? selectedPlanPrice;
       String? selectedPlanQuestion;
       String? selectedPlanType;
@@ -18,10 +19,54 @@ void showEditPlanDialog({
       final SubscriptionProvider controller = context.watch();
       final CategoryProvider categoryProvider = context.watch();
 
+      final SubscriptionRepo subscriptionRepo = SubscriptionRepo();
+
+      final categoryMap = Map.fromEntries(
+        categoryProvider.categoryList.map((c) => MapEntry(c.id, c)),
+      );
+
       return Dialog(
         child: StatefulBuilder(
           builder: (context, setState) {
-            void update() async {}
+            void update() async {
+              if (selectedPlan == null) return;
+
+              final (data, error) = await subscriptionRepo
+                  .updateSubscriptionPlan(
+                    SubscriptionPackageModel(
+                      id: selectedPlan!.id,
+                      packageName: selectedPlan!.packageName,
+                      activeUsers: selectedPlan!.activeUsers,
+                      pricePerMonth:
+                          double.tryParse(selectedPlanPrice ?? "0") ??
+                          selectedPlan?.pricePerMonth ??
+                          0,
+
+                      questions: 0,
+                      packageType: "",
+                      categoryIds: selectedCategories,
+                      features: selectedPlanFeatures,
+                      createdAt: "",
+                      updatedAt: "",
+                    ),
+                  );
+
+              if (data != null) {
+                Navigator.pop(context, true);
+                showToast(
+                  context: context,
+                  title:
+                      "Successfully updated the plan. Please refresh the page to see updates.",
+                  type: ToastType.success,
+                );
+              } else {
+                showToast(
+                  context: context,
+                  title: "Unable to updated the plan",
+                  type: ToastType.failed,
+                );
+              }
+            }
 
             void changePlan(SubscriptionPackageModel? val) async {
               if (val == null) return;
@@ -37,9 +82,6 @@ void showEditPlanDialog({
                 selectedCategories = val.categoryIds;
               });
             }
-
-            void addFeature() {}
-            void addCategory() {}
 
             return Container(
               // height: 500,
@@ -72,9 +114,11 @@ void showEditPlanDialog({
                       ),
 
                       IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: controller.isUpdating
+                            ? null
+                            : () {
+                                Navigator.pop(context);
+                              },
                         icon: Icon(Icons.close),
                       ),
                     ],
@@ -147,8 +191,52 @@ void showEditPlanDialog({
                         .toList(),
 
                     onChanged: (e) async {
-                      // changePlan(e);
+                      if (e != null && selectedPlan != null) {
+                        setState(() => selectedCategories.add(e.id));
+                      }
                     },
+                  ),
+
+                  vPad10,
+
+                  Wrap(
+                    runSpacing: 8,
+                    spacing: 8,
+
+                    children: [
+                      ...List.generate(
+                        selectedCategories.length,
+                        (index) => Container(
+                          padding: EdgeInsets.only(left: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            border: Border.all(),
+                          ),
+                          child: Row(
+                            spacing: 8,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                categoryMap[selectedCategories[index]]?.title ??
+                                    "Undefine",
+                              ),
+
+                              IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () => selectedCategories.remove(
+                                      selectedCategories[index],
+                                    ),
+                                  );
+                                },
+
+                                icon: Icon(Icons.clear),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
 
                   vPad15,
@@ -163,7 +251,7 @@ void showEditPlanDialog({
                     initialValue: selectedPlanPrice,
                     formatter: FilteringTextInputFormatter.digitsOnly,
                     isEnable: (!controller.isLoading && !controller.isUpdating),
-                    onChange: (e) {},
+                    onChange: (e) => selectedPlanPrice = e,
                   ),
                   vPad15,
                   vPad15,
@@ -315,7 +403,7 @@ void showEditPlanDialog({
                           bg: customPurple,
                           isLoading:
                               (controller.isUpdating || controller.isUpdating),
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => update(),
                           title: "Update Plan",
                         ),
                       ),

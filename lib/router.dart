@@ -63,11 +63,15 @@ final shellRoute = ShellRoute(
         GoRoute(
           path: "question/:id",
           pageBuilder: (context, state) {
-            final categoryId = state.pathParameters["id"];
+            final category = state.pathParameters["id"];
+            final categoryId = category?.split("-")[0];
+            final categoryName = category?.split("-")[1];
+
+      
             return NoTransitionPage(
-              child: categoryId == null
+              child: categoryId == null || categoryName==null
                   ? Placeholder(child: Center(child: Text("No Data found")))
-                  : QuestionListView(categoryId: categoryId),
+                  : QuestionListView(categoryId: categoryId,categoryName:categoryName),
             );
           },
         ),

@@ -82,11 +82,11 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Add New Category",
+                            "${oldItem==null? "Add New":"Update"}  Category",
                             style: titleLarge(color: customBlack),
                           ),
                           Text(
-                            "Create a new Category for your users",
+                           "${oldItem==null? "Add New":"Update"}   Category for your users",
                             style: bodyLarge(fontWeight: FontWeight.w400),
                           ),
                         ],
@@ -201,7 +201,7 @@ void showAddCategoryDialog({required BuildContext context, Category? oldItem}) {
                           bg: customPurple,
                           isLoading: categoryProvider.isAddingCategory,
                           onTap: () => addCategory(),
-                          title: "Add Category",
+                          title: "${oldItem==null? "Add":"Update"} Category",
                         ),
                       ),
                     ],

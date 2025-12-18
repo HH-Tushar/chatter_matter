@@ -2,7 +2,8 @@ part of 'question_list_view.dart';
 
 void showAddQuestionDialog({
   required BuildContext context,
-  required Category category,
+  required String categoryId,
+  required String categoryName,
 }) {
   List<String> questions = [];
 
@@ -19,7 +20,7 @@ void showAddQuestionDialog({
           title: element,
           favoritesCount: 0,
           isBabyQuestion: isBaby,
-          categoryId: category.id,
+          categoryId: categoryId,
         ),
       ),
     );
@@ -77,7 +78,7 @@ void showAddQuestionDialog({
                             style: titleLarge(color: customBlack),
                           ),
                           Text(
-                            "Create questions for ${category.title}",
+                            "Create questions for $categoryName",
                             style: bodyLarge(fontWeight: FontWeight.w400),
                           ),
                         ],

@@ -15,7 +15,12 @@ part 'add_question.dart';
 
 class QuestionListView extends StatefulWidget {
   final String categoryId;
-  const QuestionListView({super.key, required this.categoryId});
+  final String categoryName;
+  const QuestionListView({
+    super.key,
+    required this.categoryId,
+    required this.categoryName,
+  });
 
   @override
   State<QuestionListView> createState() => _QuestionListViewState();
@@ -25,22 +30,38 @@ class _QuestionListViewState extends State<QuestionListView> {
   bool isBaby = true;
   bool isLoading = false;
   final QuestionRepo questionRepo = QuestionRepo();
-  Category? category;
+  // Category? category;
   QuestionModelList? questionModelList;
 
-  void fetchCategory() {
-    category = Provider.of<CategoryProvider>(
-      context,
-      listen: false,
-    ).categoryList.where((test) => test.id == widget.categoryId).first;
-  }
+  // void fetchCategory() {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   print(widget.categoryId);
+  //   Future.delayed(Duration(seconds: 1)).then((e) {
+  //     final categories = Provider.of<CategoryProvider>(
+  //       context,
+  //       listen: false,
+  //     ).categoryList;
+
+  //     if (categories.isNotEmpty) {
+  //       category = categories
+  //           .where((test) => test.id == widget.categoryId)
+  //           .first;
+  //     }
+  //   });
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  //   print(category);
+  // }
 
   void fetchQuestions() async {
     setState(() {
       isLoading = true;
     });
     final (data, error) = await questionRepo.getQuestionPaginator(
-      pageToken: questionModelList?.pageToken,
+      pageToken: questionModelList?.pageToken ?? "",
       categoryId: widget.categoryId,
       isBabyQuestion: isBaby,
     );
@@ -57,8 +78,8 @@ class _QuestionListViewState extends State<QuestionListView> {
 
   @override
   void initState() {
-    fetchCategory();
     fetchQuestions();
+    // fetchCategory();
     super.initState();
   }
 
@@ -66,7 +87,7 @@ class _QuestionListViewState extends State<QuestionListView> {
   Widget build(BuildContext context) {
     return isLoading
         ? Center(child: CircularProgressIndicator())
-        : category == null || questionModelList == null
+        : questionModelList == null
         ? Center(child: Text("No Data found"))
         : Column(
             children: [
@@ -112,7 +133,9 @@ class _QuestionListViewState extends State<QuestionListView> {
                             onPressed: () {
                               showAddQuestionDialog(
                                 context: context,
-                                category: category!,
+                                // category: category!,
+                                categoryId: widget.categoryId,
+                                categoryName: widget.categoryName,
                               );
                             },
                             label: Text(
@@ -181,7 +204,7 @@ class _QuestionListViewState extends State<QuestionListView> {
                       children: [
                         Expanded(
                           child: Text(
-                            category!.title,
+                            widget.categoryName,
                             style: titleLarge(
                               fontWeight: FontWeight.w500,
                               color: customBlack,

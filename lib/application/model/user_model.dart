@@ -43,6 +43,7 @@ class AppUser {
     final String name;
     final dynamic age;
     final String email;
+    final bool isActive;
     final int updatedAt;
 
     AppUser({
@@ -60,6 +61,7 @@ class AppUser {
         required this.name,
         required this.age,
         required this.email,
+        required this.isActive,
         required this.updatedAt,
     });
 
@@ -81,6 +83,7 @@ class AppUser {
         subscriptionEndsAt: json["subscriptionEndsAt"],
         name: json["name"],
         age: json["age"],
+        isActive: json["isActive"],
         email: json["email"],
         updatedAt: json["updatedAt"],
     );

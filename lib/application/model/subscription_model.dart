@@ -18,11 +18,11 @@ class SubscriptionPackageList {
 class SubscriptionPackageModel {
   final String id;
   final String packageName;
-  final double pricePerMonth;
+   double pricePerMonth;
   final int questions;
   final int activeUsers;
   final String packageType; // or use enum if you have SubscriptionType in Dart
-  final List<String> categoryIds;
+  List<String> categoryIds;
   final List<String> features;
 
   final String createdAt;
@@ -63,14 +63,10 @@ class SubscriptionPackageModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'packageName': packageName,
       'pricePerMonth': pricePerMonth,
       'questions': questions,
-      'packageType': packageType,
       'categoryIds': categoryIds,
       'features': features,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
     };
   }
 }

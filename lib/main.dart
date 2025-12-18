@@ -6,6 +6,7 @@ import 'application/firebase/firebase_config.dart';
 import 'provider/category_provider.dart';
 import 'provider/dashboard_provider.dart';
 import 'provider/subscription_provider.dart';
+import 'provider/user_provider.dart';
 import 'router.dart';
 
 void main() async {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => SubscriptionProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

@@ -11,6 +11,6 @@ enum JobStatus {
 }
 
 enum UserRole { customer, contractor }
-enum NotificationType { job_invite,sent_offer, job_completed ,job_application}
+enum ToastType { warning,success,failed}
 
 enum OfferActionType { accept, reject, cancel }

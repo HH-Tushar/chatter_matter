@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import '../../core/api_handler.dart';
 import '../../env.dart';
-import '../model/category_model.dart';
 import '../model/user_model.dart';
 
 class AppUserRepo {
