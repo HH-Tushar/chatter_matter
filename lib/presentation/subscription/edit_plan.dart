@@ -160,84 +160,84 @@ void showEditPlanDialog({
                     },
                   ),
 
-                  vPad15,
-                  Text(
-                    "Select Categories",
-                    style: titleSmall(fontWeight: FontWeight.w600),
-                  ),
-                  vPad10,
+                  // vPad15,
+                  // Text(
+                  //   "Select Categories",
+                  //   style: titleSmall(fontWeight: FontWeight.w600),
+                  // ),
+                  // vPad10,
 
-                  DropdownButtonFormField<Category>(
-                    icon: Icon(Icons.keyboard_arrow_down_outlined),
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: "Select Category",
-                      fillColor: customWhite,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      // prefixIcon: Icon(Icons.filter_alt_outlined),
-                    ),
+                  // DropdownButtonFormField<Category>(
+                  //   icon: Icon(Icons.keyboard_arrow_down_outlined),
+                  //   decoration: InputDecoration(
+                  //     filled: true,
+                  //     hintText: "Select Category",
+                  //     fillColor: customWhite,
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(6),
+                  //     ),
+                  //     // prefixIcon: Icon(Icons.filter_alt_outlined),
+                  //   ),
 
-                    borderRadius: BorderRadius.circular(12),
+                  //   borderRadius: BorderRadius.circular(12),
 
-                    items: categoryProvider.categoryList
-                        .map(
-                          (item) => DropdownMenuItem(
-                            value: item,
-                            child: Text(item.title),
-                          ),
-                        )
-                        .toList(),
+                  //   items: categoryProvider.categoryList
+                  //       .map(
+                  //         (item) => DropdownMenuItem(
+                  //           value: item,
+                  //           child: Text(item.title),
+                  //         ),
+                  //       )
+                  //       .toList(),
 
-                    onChanged: (e) async {
-                      if (e != null && selectedPlan != null) {
-                        setState(() => selectedCategories.add(e.id));
-                      }
-                    },
-                  ),
+                  //   onChanged: (e) async {
+                  //     if (e != null && selectedPlan != null) {
+                  //       setState(() => selectedCategories.add(e.id));
+                  //     }
+                  //   },
+                  // ),
 
-                  vPad10,
+                  // vPad10,
 
-                  Wrap(
-                    runSpacing: 8,
-                    spacing: 8,
+                  // Wrap(
+                  //   runSpacing: 8,
+                  //   spacing: 8,
 
-                    children: [
-                      ...List.generate(
-                        selectedCategories.length,
-                        (index) => Container(
-                          padding: EdgeInsets.only(left: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            border: Border.all(),
-                          ),
-                          child: Row(
-                            spacing: 8,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                categoryMap[selectedCategories[index]]?.title ??
-                                    "Undefine",
-                              ),
+                  //   children: [
+                  //     ...List.generate(
+                  //       selectedCategories.length,
+                  //       (index) => Container(
+                  //         padding: EdgeInsets.only(left: 14),
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(defaultRadius),
+                  //           border: Border.all(),
+                  //         ),
+                  //         child: Row(
+                  //           spacing: 8,
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+                  //             Text(
+                  //               categoryMap[selectedCategories[index]]?.title ??
+                  //                   "Undefine",
+                  //             ),
 
-                              IconButton(
-                                onPressed: () {
-                                  setState(
-                                    () => selectedCategories.remove(
-                                      selectedCategories[index],
-                                    ),
-                                  );
-                                },
+                  //             IconButton(
+                  //               onPressed: () {
+                  //                 setState(
+                  //                   () => selectedCategories.remove(
+                  //                     selectedCategories[index],
+                  //                   ),
+                  //                 );
+                  //               },
 
-                                icon: Icon(Icons.clear),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  //               icon: Icon(Icons.clear),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
 
                   vPad15,
 

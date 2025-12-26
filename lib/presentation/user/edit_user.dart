@@ -161,7 +161,11 @@ void showUserManagementDialog({required BuildContext context}) {
   );
 }
 
-void showUserDetailsDialog({required BuildContext context}) {
+
+
+
+
+void showUserDetailsDialog({required BuildContext context,required AppUser user}) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -183,7 +187,7 @@ void showUserDetailsDialog({required BuildContext context}) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Manage User", style: titleLarge(color: customBlack)),
+                  Text("User Details", style: titleLarge(color: customBlack)),
 
                   IconButton(
                     onPressed: () {
@@ -211,8 +215,8 @@ void showUserDetailsDialog({required BuildContext context}) {
                   selected: true,
 
                   leading: CircleAvatar(radius: 24),
-                  title: Text("Sarah Jahan"),
-                  subtitle: Text("sarah@gmail.com"),
+                  title: Text(user.name),
+                  subtitle: Text(user.email),
                   trailing: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: defaultPadding,
@@ -222,7 +226,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                       color: primaryColor,
                       borderRadius: BorderRadius.circular(defaultRadius),
                     ),
-                    child: Text("Free", style: bodyMedium(color: customWhite)),
+                    child: Text(user.subscriptionType, style: bodyMedium(color: customWhite)),
                   ),
                 ),
               ),
@@ -264,7 +268,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                                   "Status",
                                   style: bodyMedium(color: customGrey),
                                 ),
-                                Text("Active", style: titleSmall()),
+                                Text(user.isActive?"Active":"Deactivated", style: titleSmall()),
                               ],
                             ),
                           ],
@@ -303,7 +307,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                                   "Joined",
                                   style: bodyMedium(color: customGrey),
                                 ),
-                                Text("2024-10-12", style: titleSmall()),
+                                Text(user.journalCount, style: titleSmall()),
                               ],
                             ),
                           ],
@@ -369,11 +373,11 @@ void showUserDetailsDialog({required BuildContext context}) {
                                       color: primaryColor,
                                     ),
 
-                                    Text("Active", style: titleSmall()),
+                                    Text("Journal", style: titleSmall()),
                                   ],
                                 ),
                                 Text(
-                                  "Status",
+                                 user.journalCount,
                                   style: bodyMedium(color: customGrey),
                                 ),
                               ],
@@ -405,7 +409,7 @@ void showUserDetailsDialog({required BuildContext context}) {
                                     Text("Favorites", style: titleSmall()),
                                   ],
                                 ),
-                                Text("8", style: bodyMedium(color: customGrey)),
+                                Text(user.favoriteCount, style: bodyMedium(color: customGrey)),
                               ],
                             ),
                           ),

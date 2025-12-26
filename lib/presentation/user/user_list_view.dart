@@ -166,11 +166,15 @@ class _UserListViewState extends State<UserListView>
                 child: ListView.builder(
                   // padding: EdgeInsets.symmetric(horizontal: defaultPadding),
                   itemCount: userProvider.appUsers.length,
+                  // itemCount: 0,
                   cacheExtent: 120,
                   //  itemExtent: 120,
                   itemBuilder: (context, index) => _UserRow(
                     onManage: () => showUserManagementDialog(context: context),
-                    onView: () => showUserDetailsDialog(context: context),
+                    onView: () => showUserDetailsDialog(
+                      context: context,
+                      user: userProvider.appUsers[index],
+                    ),
                     user: userProvider.appUsers[index],
                   ),
                 ),

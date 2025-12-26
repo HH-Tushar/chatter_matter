@@ -2,7 +2,6 @@ part of 'user_list_view.dart';
 
 class _UserRow extends StatelessWidget {
   const _UserRow({
-    super.key,
     required this.onManage,
     required this.onView,
     required this.user,
@@ -143,9 +142,7 @@ Widget _subscriptionTile(String title) {
           : title == "standard"
           ? primaryContainer
           : null,
-      gradient: title == "vip"
-          ? LinearGradient(colors: vipGradient)
-          : null,
+      gradient: title == "vip" ? LinearGradient(colors: vipGradient) : null,
       borderRadius: BorderRadius.circular(defaultRadius),
     ),
     child: Text(title, style: bodySmall(color: customWhite)),
