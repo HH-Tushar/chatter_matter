@@ -20,7 +20,9 @@ class _SettingViewState extends State<SettingView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool isBaby = false;
+
+  int currentIndex = 0;
+  final List<Widget> children = [PersonalSpace(), PrivacyPolicy()];
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -43,10 +45,10 @@ class _SettingViewState extends State<SettingView>
             // spacing: 10,
             children: [
               ElevatedButton(
-                onPressed: isBaby
+                onPressed: currentIndex == 0
                     ? null
                     : () => setState(() {
-                        isBaby = true;
+                        currentIndex = 0;
                       }),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
@@ -57,10 +59,10 @@ class _SettingViewState extends State<SettingView>
                 child: Text("Personal Space", style: titleSmall()),
               ),
               ElevatedButton(
-                onPressed: !isBaby
+                onPressed: currentIndex == 1
                     ? null
                     : () => setState(() {
-                        isBaby = false;
+                        currentIndex = 1;
                       }),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
@@ -76,7 +78,7 @@ class _SettingViewState extends State<SettingView>
 
         vPad20,
 
-        Expanded(child: SingleChildScrollView(child: PrivacyPolicy())),
+        Expanded(child: SingleChildScrollView(child: children[currentIndex])),
       ],
     );
   }

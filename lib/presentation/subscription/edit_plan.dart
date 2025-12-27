@@ -9,21 +9,23 @@ void showEditPlanDialog({
     barrierDismissible: false,
     builder: (BuildContext context) {
       SubscriptionPackageModel? selectedPlan;
-
+      final featureController = TextEditingController();
+      String featureEdit = "";
       String? selectedPlanPrice;
+      String? selectedPlanPriceYear;
       String? selectedPlanQuestion;
       String? selectedPlanType;
       List<String> selectedPlanFeatures = [];
       List<String> selectedCategories = [];
 
       final SubscriptionProvider controller = context.watch();
-      final CategoryProvider categoryProvider = context.watch();
+      // final CategoryProvider categoryProvider = context.watch();
 
       final SubscriptionRepo subscriptionRepo = SubscriptionRepo();
 
-      final categoryMap = Map.fromEntries(
-        categoryProvider.categoryList.map((c) => MapEntry(c.id, c)),
-      );
+      // final categoryMap = Map.fromEntries(
+      //   categoryProvider.categoryList.map((c) => MapEntry(c.id, c)),
+      // );
 
       return Dialog(
         child: StatefulBuilder(
@@ -40,6 +42,10 @@ void showEditPlanDialog({
                       pricePerMonth:
                           double.tryParse(selectedPlanPrice ?? "0") ??
                           selectedPlan?.pricePerMonth ??
+                          0,
+                      pricePerYear:
+                          double.tryParse(selectedPlanPriceYear ?? "0") ??
+                          selectedPlan?.pricePerYear ??
                           0,
 
                       questions: 0,
@@ -74,10 +80,12 @@ void showEditPlanDialog({
               setState(() {
                 selectedPlan = val;
                 selectedPlanPrice = val.pricePerMonth.toStringAsFixed(2);
+                selectedPlanPriceYear = val.pricePerYear.toStringAsFixed(2);
                 selectedPlanQuestion = val.questions < 1
                     ? "Unlimited"
                     : val.questions.toString();
                 selectedPlanType = val.packageType;
+
                 selectedPlanFeatures = val.features;
                 selectedCategories = val.categoryIds;
               });
@@ -117,6 +125,7 @@ void showEditPlanDialog({
                         onPressed: controller.isUpdating
                             ? null
                             : () {
+                                featureController.dispose();
                                 Navigator.pop(context);
                               },
                         icon: Icon(Icons.close),
@@ -238,7 +247,6 @@ void showEditPlanDialog({
                   //     ),
                   //   ],
                   // ),
-
                   vPad15,
 
                   Text(
@@ -249,15 +257,33 @@ void showEditPlanDialog({
                   customInput(
                     hintText: selectedPlanPrice ?? "",
                     initialValue: selectedPlanPrice,
-                    formatter: FilteringTextInputFormatter.digitsOnly,
+                    formatter: FilteringTextInputFormatter.allow(
+                      RegExp(r'^\d*\.?\d*$'),
+                    ),
                     isEnable: (!controller.isLoading && !controller.isUpdating),
                     onChange: (e) => selectedPlanPrice = e,
+                  ),
+                  vPad15,
+
+                  Text(
+                    "Price Per Year",
+                    style: titleSmall(fontWeight: FontWeight.w600),
+                  ),
+                  vPad10,
+                  customInput(
+                    hintText: selectedPlanPriceYear ?? "",
+                    initialValue: selectedPlanPriceYear,
+                    formatter: FilteringTextInputFormatter.allow(
+                      RegExp(r'^\d*\.?\d*$'),
+                    ),
+                    isEnable: (!controller.isLoading && !controller.isUpdating),
+                    onChange: (e) => selectedPlanPriceYear = e,
                   ),
                   vPad15,
                   vPad15,
 
                   Text(
-                    "Question",
+                    "Question per day",
                     style: titleSmall(fontWeight: FontWeight.w600),
                   ),
                   vPad10,
@@ -341,6 +367,7 @@ void showEditPlanDialog({
                         children: [
                           Expanded(
                             child: TextFormField(
+                              controller: featureController,
                               decoration: InputDecoration(
                                 hintText: "Add Features...",
                                 filled: true,
@@ -352,6 +379,7 @@ void showEditPlanDialog({
                                   ),
                                 ),
                               ),
+                              // onChanged: (value) => featureEdit = value,
                             ),
                           ),
 
@@ -364,7 +392,14 @@ void showEditPlanDialog({
                               borderRadius: BorderRadius.circular(8),
                             ),
 
-                            onPressed: () {},
+                            onPressed: () {
+                              selectedPlanFeatures.add(
+                                featureController.text.trim(),
+                              );
+                              setState(() {
+                                featureController.text = "";
+                              });
+                            },
 
                             child: Center(child: Icon(Icons.add)),
                           ),
@@ -376,7 +411,13 @@ void showEditPlanDialog({
                         (i) => ListTile(
                           title: Text(selectedPlanFeatures[i]),
                           trailing: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                selectedPlanFeatures.remove(
+                                  selectedPlanFeatures[i],
+                                );
+                              });
+                            },
                             icon: Icon(Icons.close),
                           ),
                         ),
@@ -394,7 +435,10 @@ void showEditPlanDialog({
                           baseColor: customPurple,
                           isLoading:
                               (controller.isUpdating || controller.isUpdating),
-                          onTap: () => Navigator.pop(context),
+                          onTap: () {
+                            featureController.dispose();
+                            Navigator.pop(context);
+                          },
                           title: "Cancel",
                         ),
                       ),

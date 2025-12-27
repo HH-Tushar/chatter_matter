@@ -18,7 +18,8 @@ class SubscriptionPackageList {
 class SubscriptionPackageModel {
   final String id;
   final String packageName;
-   double pricePerMonth;
+  double pricePerMonth;
+  double pricePerYear;
   final int questions;
   final int activeUsers;
   final String packageType; // or use enum if you have SubscriptionType in Dart
@@ -37,6 +38,7 @@ class SubscriptionPackageModel {
     required this.packageType,
     required this.categoryIds,
     required this.features,
+    required this.pricePerYear,
 
     required this.createdAt,
     required this.updatedAt,
@@ -47,6 +49,7 @@ class SubscriptionPackageModel {
     return SubscriptionPackageModel(
       id: json['id'] as String,
       packageName: json['packageName'] as String,
+      pricePerYear: json['pricePerYear'] ?? "0",
       pricePerMonth: (json['pricePerMonth'] as num).toDouble(),
       questions: json['questions'] as int,
       packageType: json['packageType'] as String,
@@ -64,6 +67,7 @@ class SubscriptionPackageModel {
     return {
       'id': id,
       'pricePerMonth': pricePerMonth,
+      'pricePerYear': pricePerYear,
       'questions': questions,
       'categoryIds': categoryIds,
       'features': features,

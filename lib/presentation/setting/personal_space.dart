@@ -99,6 +99,9 @@ class PersonalSpace extends StatelessWidget {
             icon: Icon(Icons.save),
           ),
         ),
+
+        vPad35,
+        vPad35,
       ],
     );
   }
