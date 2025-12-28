@@ -16,7 +16,7 @@ class CategoryRepo {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return failed(SessionExpired());
 
-      final token = await user.getIdToken();
+      final token = await user.getIdToken(true);
 
       final url = Uri.parse("$baseUrl/addCategory");
 

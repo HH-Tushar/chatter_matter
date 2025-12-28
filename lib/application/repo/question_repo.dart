@@ -62,7 +62,7 @@ class QuestionRepo {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return failed(SessionExpired());
 
-      final token = await user.getIdToken();
+      final token = await user.getIdToken(true);
 
       String uri =
           "$baseUrl/getQuestionPaginator?categoryId=$categoryId&isBabyQuestion=$isBabyQuestion&limit=$limit";

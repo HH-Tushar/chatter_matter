@@ -12,25 +12,23 @@ class FirebaseConfig {
   static Future<void> initialize() async {
     // Initialize Firebase
     await Firebase.initializeApp(
-      options: kIsWeb
-          ? const FirebaseOptions(
-              apiKey: "YOUR_API_KEY",
-              authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-              projectId: "YOUR_PROJECT_ID",
-              storageBucket: "YOUR_PROJECT_ID.appspot.com",
-              messagingSenderId: "YOUR_SENDER_ID",
-              appId: "YOUR_APP_ID",
-            )
-          : null,
+      options: const FirebaseOptions(
+        apiKey: 'AIzaSyAIiafel-JFM4wEeQaHG-3bAB_fJFtddR4',
+        appId: '1:196013058870:web:af1c436ce3ae457e476197',
+        messagingSenderId: '196013058870',
+        projectId: 'chatter-matters',
+        authDomain: 'chatter-matters.firebaseapp.com',
+        storageBucket: 'chatter-matters.firebasestorage.app',
+      ),
     );
 
-    if (kDebugMode) {
-      firestore.useFirestoreEmulator('localhost', 8080);
-      auth.useAuthEmulator('localhost', 9099);
-      storage.useStorageEmulator('localhost', 9199);
-      print('Connected to Firebase Emulators (Debug Mode)');
-    } else {
-      print('Connected to real Firebase project (Production)');
-    }
+    // if (kDebugMode) {
+    //   firestore.useFirestoreEmulator('localhost', 8080);
+    //   auth.useAuthEmulator('localhost', 9099);
+    //   storage.useStorageEmulator('localhost', 9199);
+    //   print('Connected to Firebase Emulators (Debug Mode)');
+    // } else {
+    //   print('Connected to real Firebase project (Production)');
+    // }
   }
 }

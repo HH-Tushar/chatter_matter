@@ -7,16 +7,12 @@ import '../../env.dart';
 import '../model/user_model.dart';
 
 class AppUserRepo {
-
-
-
-
   Future<Attempt<UserList>> getUserList() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return failed(SessionExpired());
 
-      final token = await user.getIdToken();
+      final token = await user.getIdToken(true);
 
       final url = Uri.parse("$baseUrl/getUsers");
 
@@ -46,9 +42,4 @@ class AppUserRepo {
       return failed(Failure(title: e.toString()));
     }
   }
-
-
-
-
-
 }
