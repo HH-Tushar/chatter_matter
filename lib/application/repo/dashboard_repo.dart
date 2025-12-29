@@ -7,10 +7,6 @@ import '../../env.dart';
 import '../model/dashboard_stats.dart';
 
 class DashboardRepo {
-
-
-
-
   Future<Attempt<DashboardStatus>> getDashboardStats() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -18,7 +14,7 @@ class DashboardRepo {
 
       final token = await user.getIdToken();
 
-      final url = Uri.parse("$baseUrl/getDashboardStats");
+      final url = Uri.parse("$baseUrl/getDashboardStats2?year=2025");
 
       final response = await http
           .get(
@@ -31,6 +27,7 @@ class DashboardRepo {
           .timeout(const Duration(seconds: 10)); // Prevents infinite waiting
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print(jsonDecode(response.body));
         return success(DashboardStatus.fromJson(jsonDecode(response.body)));
       } else if (response.statusCode == 401) {
         return failed(SessionExpired());

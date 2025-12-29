@@ -1,9 +1,8 @@
 part of '../home_view.dart';
 
-
 class UserGrowthChart extends StatefulWidget {
-  const UserGrowthChart({super.key});
-
+  const UserGrowthChart({super.key, required this.barStacks});
+  final List<BarStack> barStacks;
   @override
   State<UserGrowthChart> createState() => _UserGrowthChartState();
 }
@@ -13,8 +12,8 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
 
   @override
   void initState() {
+    init();
     super.initState();
-    defineToolTip();
   }
 
   defineToolTip() {
@@ -31,9 +30,15 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
             if (data == null || !mounted) return const SizedBox.shrink();
 
             final chartData = data as ChartData;
-            final totalUsers = ((chartData.revenue + chartData.users) / 1000)
-                .round();
-            final totalRevenue = (chartData.revenue / 1000).round();
+            // final totalUsers = (( chartData.users) / 1000)
+            //     .round();
+            // final totalRevenue = (chartData.revenue / 1000).round();
+            final totalRevenue = chartData.revenue > 1000
+                ? "$currency ${(chartData.revenue / 1000).toStringAsFixed(2)}k"
+                : "$currency ${chartData.revenue}";
+            final totalUsers = chartData.users > 1000
+                ? "${(chartData.users / 1000).toStringAsFixed(2)}k"
+                : "${chartData.users}";
 
             return Container(
               padding: const EdgeInsets.all(16),
@@ -59,13 +64,13 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
                     children: [
                       _buildTooltipInfoItem(
                         label: 'Total User',
-                        value: '${totalUsers}k',
+                        value: totalUsers,
                         color: primaryColor,
                       ),
                       const SizedBox(width: 24),
                       _buildTooltipInfoItem(
                         label: 'Total Revenue',
-                        value: '\$ ${totalRevenue}k',
+                        value: totalRevenue,
                         color: primaryContainer,
                       ),
                     ],
@@ -77,20 +82,59 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
     );
   }
 
-  final List<ChartData> chartData = [
-    ChartData('Jan', 15000, 30000 - 15000),
-    ChartData('Feb', 7000, 18000),
-    ChartData('Mar', 6000, 30000),
-    ChartData('Apr', 3500, 23000),
-    ChartData('May', 5500, 10000),
-    ChartData('Jun', 4000, 7000),
-    ChartData('Jul', 10000, 25000),
-    ChartData('Aug', 4500, 22000),
-    ChartData('Sep', 6500, 23000),
-    ChartData('Oct', 6000, 16000),
-    ChartData('Nov', 10000, 28000),
-    ChartData('Dec', 5000, 24000),
-  ];
+  List<ChartData> chartData = [];
+
+  double maxPick = 0;
+  double divisor = 2;
+
+  convertToFullYearChartData(List<BarStack> barStacks) {
+    // List of all months in order
+  
+
+    // Create a map for fast lookup
+    final barMap = {for (var b in barStacks) b.month: b};
+
+    // Build chart data with all months
+    chartData = shortMonthNames.map((month) {
+      if (barMap.containsKey(month)) {
+        final b = barMap[month]!;
+        return ChartData(month, b.totalUsers.toDouble(), b.totalRevenue);
+      } else {
+        return ChartData(month, 0, 0);
+      }
+    }).toList();
+
+    setState(() {
+      getMaxPickWithDivisor(chartData);
+    });
+  }
+
+  getMaxPickWithDivisor(List<ChartData> chartData) {
+    maxPick = chartData
+        .map((data) => data.users + data.revenue)
+        .reduce((a, b) => a > b ? a : b);
+
+    // 2️⃣ Find a suitable divisor (at least 4 parts)
+    double rawDivisor = maxPick / 4;
+
+    // Round to a "nice" number for chart scale
+    // We round up to nearest 10, 50, 100, 500, 1000, etc.
+    double exponent = rawDivisor > 0
+        ? (log(rawDivisor) / ln10).floorToDouble()
+        : 0;
+    double magnitude = pow(10, exponent).toDouble();
+
+    maxPick = maxPick + divisor;
+    divisor = (rawDivisor / magnitude).ceil() * magnitude;
+    setState(() {});
+  }
+
+  init() {
+    defineToolTip();
+    convertToFullYearChartData(widget.barStacks);
+
+    // convertToFullYearChartData(widget.barStacks);
+  }
 
   @override
   void dispose() {
@@ -202,8 +246,8 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
                 ),
               ),
               primaryYAxis: NumericAxis(
-                interval: 10000,
-                maximum: 40000,
+                interval: divisor,
+                maximum: maxPick,
                 majorGridLines: MajorGridLines(
                   width: 0.5,
                   dashArray: [4, 4],
@@ -216,9 +260,11 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
                   color: Colors.black54,
                 ),
                 axisLabelFormatter: (AxisLabelRenderDetails args) {
-                  final value = args.value / 1000;
+                  final value = args.value > 1000
+                      ? "${(args.value / 1000).toStringAsFixed(1)}k"
+                      : "${args.value}";
                   return ChartAxisLabel(
-                    '${value.toInt()}k',
+                    value,
                     const TextStyle(fontSize: 12, color: Colors.black54),
                   );
                 },

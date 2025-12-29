@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserList {
   final int count;
   final dynamic nextPageToken;
@@ -34,7 +36,7 @@ class AppUser {
   final String role;
   final dynamic subscriptionStartedAt;
   final bool isEmailVerified;
-  final int createdAt;
+  final dynamic createdAt;
   final String uid;
   final int lastLoginAt;
   final String provider;
@@ -42,8 +44,8 @@ class AppUser {
   final String imageUrl;
   final dynamic subscriptionEndsAt;
   final String name;
-  final String journalCount;
-  final String favoriteCount;
+  final int journalCount;
+  final int favoriteCount;
   final String age;
   final String email;
   final bool isActive;
@@ -77,17 +79,24 @@ class AppUser {
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
     id: json["id"],
     role: json["role"],
-    subscriptionStartedAt: json["subscriptionStartedAt"],
+
+    // subscriptionStartedAt: json["subscriptionStartedAt"] != null
+    //     ? (json["subscriptionStartedAt"] as Timestamp).toDate()
+    //     : null,
+    subscriptionStartedAt: DateTime.now(),
+    // subscriptionEndsAt: DateTime.now(),
+    createdAt: DateTime.now(),
     isEmailVerified: json["isEmailVerified"],
-    journalCount: json["journalCount"].toString(),
-    favoriteCount: json["favoriteCount"].toString(),
-    createdAt: json["createdAt"],
+
+    journalCount: json["journalCount"]??0,
+    favoriteCount: json["favoriteCount"] ?? "0",
     uid: json["uid"],
     lastLoginAt: json["lastLoginAt"],
     provider: json["provider"],
     subscriptionType: json["subscriptionType"],
     imageUrl: json["imageUrl"],
-    subscriptionEndsAt: json["subscriptionEndsAt"],
+
+    subscriptionEndsAt: json["subscriptionEndsAt"] ,
     name: json["name"],
     age: json["age"] ?? "",
     isActive: json["isActive"],

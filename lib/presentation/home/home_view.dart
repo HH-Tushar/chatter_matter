@@ -1,14 +1,20 @@
+import 'dart:math';
+
+import 'package:chatter_matter_admin/env.dart';
 import 'package:chatter_matter_admin/provider/dashboard_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../application/model/dashboard_stats.dart';
 import '../../common/app_bar.dart';
 import '../../common/colors.dart';
 import '../../common/custom_bar.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
+import '../../core/enums.dart';
+import '../../core/formaters.dart';
 
 part 'components/top_tile.dart';
 part 'components/quick_start_tile.dart';
@@ -23,6 +29,19 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final DashboardProvider dashboardProvider = context.watch();
     final status = dashboardProvider.dashboardStatus;
+
+    double currentMonthRev() {
+      final now = DateTime.now();
+      final currentMonth = shortMonthNames[now.month - 1]; // month is 1-based
+      final currentMonthData = status?.barStacks.firstWhere(
+        (b) => b.month == currentMonth,
+        orElse: () =>
+            BarStack(month: currentMonth, totalUsers: 0, totalRevenue: 0),
+      );
+
+      return currentMonthData?.totalRevenue ?? 0;
+    }
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -66,7 +85,7 @@ class HomeView extends StatelessWidget {
 
                   topTile(
                     title: "Monthly Revenue",
-                    value: "50,000",
+                    value: "$currency ${currentMonthRev()}",
                     backgroundIcon: "assets/dashboard/revinue_bg.svg",
                     foregroundIcon: "assets/dashboard/revinue.svg",
                     isPrimary: false,
@@ -95,7 +114,12 @@ class HomeView extends StatelessWidget {
           ),
           vPad10,
 
-          SizedBox(height: 500, child: UserGrowthChart()),
+          SizedBox(
+            height: 500,
+            child: UserGrowthChart(
+              barStacks: dashboardProvider.dashboardStatus?.barStacks ?? [],
+            ),
+          ),
 
           vPad10,
 

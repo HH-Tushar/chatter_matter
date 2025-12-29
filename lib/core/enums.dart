@@ -14,3 +14,4 @@ enum UserRole { customer, contractor }
 enum ToastType { warning,success,failed}
 
 enum OfferActionType { accept, reject, cancel }
+
