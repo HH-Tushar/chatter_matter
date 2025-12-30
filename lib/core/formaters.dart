@@ -47,7 +47,7 @@ String toOrdinal(int number) {
   }
 }
 
-final List<String> shortMonthNames = [
+const List<String> shortMonthNames = [
   'Jan',
   'Feb',
   'Mar',
@@ -76,3 +76,11 @@ final List<String> fullMonthNames = [
   'November',
   'December',
 ];
+
+String formatDate(DateTime date) {
+  final day = date.day.toString().padLeft(2, '0');
+  final month = shortMonthNames[date.month - 1];
+  final year = date.year;
+
+  return '$month-$day-$year';
+}

@@ -8,6 +8,7 @@ import '../../application/model/user_model.dart';
 import '../../common/app_bar.dart';
 import '../../common/colors.dart';
 import '../../common/padding.dart';
+import '../../env.dart';
 import '../../provider/user_provider.dart';
 
 part 'user_row.dart';
@@ -48,7 +49,7 @@ class _UserListViewState extends State<UserListView>
                         child: TextFormField(
                           decoration: InputDecoration(
                             filled: true,
-                            hintText: "Search here..",
+                            hintText: "search by email...",
                             fillColor: customWhite,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
@@ -75,15 +76,25 @@ class _UserListViewState extends State<UserListView>
 
                           items: [
                             DropdownMenuItem(
-                              value: "all",
+                              value: SubscriptionType.all,
                               child: Text("All Category"),
                             ),
                             DropdownMenuItem(
-                              value: "all3",
-                              child: Text("All Category"),
+                              value: SubscriptionType.free,
+                              child: Text("Free User"),
+                            ),
+                            DropdownMenuItem(
+                              value: SubscriptionType.standard,
+                              child: Text("Standard User"),
+                            ),
+                            DropdownMenuItem(
+                              value: SubscriptionType.vip,
+                              child: Text("Vip User"),
                             ),
                           ],
-                          onChanged: (e) async {},
+                          onChanged: (e) async {
+                            userProvider.toggleSubscriptionType(e);
+                          },
                         ),
                       ),
 
@@ -103,15 +114,17 @@ class _UserListViewState extends State<UserListView>
 
                           items: [
                             DropdownMenuItem(
-                              value: "active",
+                              value: true,
                               child: Text("Active"),
                             ),
                             DropdownMenuItem(
-                              value: "deactivated",
+                              value: false,
                               child: Text("Deactivated"),
                             ),
                           ],
-                          onChanged: (e) async {},
+                          onChanged: (e) async {
+                            userProvider.toggleActiveType(e);
+                          },
                         ),
                       ),
                     ],

@@ -63,7 +63,7 @@ class DashboardStatus {
             ? List<BarStack>.from(
                 json["barStacks"].map((x) => BarStack.fromJson(x)),
               )
-            : [], // default empty list if null
+            : [],
       );
 
   Map<String, dynamic> toJson() => {

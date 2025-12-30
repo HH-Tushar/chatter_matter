@@ -7,18 +7,30 @@ import '../../env.dart';
 import '../model/user_model.dart';
 
 class AppUserRepo {
-  Future<Attempt<UserList>> getUserList() async {
+  Future<Attempt<UserList>> getUserList({
+    String? subscriptionType,
+    int limit = 20,
+    String? pageToken,
+    bool? isActive,
+  }) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return failed(SessionExpired());
 
       final token = await user.getIdToken(true);
 
-      final url = Uri.parse("$baseUrl/getUsers");
+      final uri = Uri.parse("$baseUrl/getUsers").replace(
+        queryParameters: {
+          'subscriptionType': subscriptionType,
+          'limit': limit.toString(),
+          if (pageToken != null) 'pageToken': pageToken,
+          if (isActive != null) 'isActive': isActive.toString(),
+        },
+      );
 
       final response = await http
           .get(
-            url,
+            uri,
             headers: {
               "Content-Type": "application/json",
               "Authorization": "Bearer $token",

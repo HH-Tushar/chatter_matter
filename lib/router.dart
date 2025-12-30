@@ -10,6 +10,7 @@ import 'presentation/category/category_list_view.dart';
 import 'presentation/home/home_view.dart';
 import 'presentation/landing/landing_view.dart';
 import 'presentation/question/question_list_view.dart';
+import 'presentation/transaction/transaction_list_view.dart';
 import 'presentation/user/user_list_view.dart';
 import 'provider/dashboard_provider.dart';
 
@@ -20,6 +21,7 @@ class CustomRoute {
   static const String users = "/users";
   static const String subscription = "/subscription";
   static const String setting = "/setting";
+  static const String transactions = "/transactions";
 }
 
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -82,11 +84,23 @@ final shellRoute = ShellRoute(
       pageBuilder: (context, state) =>
           const NoTransitionPage(child: UserListView()),
     ),
+   
+   
     GoRoute(
       path: CustomRoute.subscription,
       pageBuilder: (context, state) =>
           const NoTransitionPage(child: SubscriptionView()),
     ),
+   
+   
+    GoRoute(
+      path: CustomRoute.transactions,
+      pageBuilder: (context, state) =>
+          const NoTransitionPage(child: TransactionListView()),
+    ),
+   
+   
+   
     GoRoute(
       path: CustomRoute.setting,
       pageBuilder: (context, state) =>

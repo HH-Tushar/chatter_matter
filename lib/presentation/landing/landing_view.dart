@@ -81,6 +81,14 @@ class LandingView extends StatelessWidget {
                       title: "Setting",
                     ),
                     drawerButton(
+                      icon: "assets/icon/setting.svg",
+                      isSelected: currentPath.contains(
+                        CustomRoute.transactions,
+                      ),
+                      onTap: () => context.go(CustomRoute.transactions),
+                      title: "Transactions",
+                    ),
+                    drawerButton(
                       isLogoutButton: true,
                       icon: "assets/icon/logout.svg",
                       isSelected: currentPath.contains(

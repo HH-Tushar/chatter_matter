@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserList {
   final int count;
-  final dynamic nextPageToken;
+  final String? nextPageToken;
   final List<AppUser> data;
 
   UserList({
@@ -88,7 +88,7 @@ class AppUser {
     createdAt: DateTime.now(),
     isEmailVerified: json["isEmailVerified"],
 
-    journalCount: json["journalCount"]??0,
+    journalCount: json["journalCount"] ?? 0,
     favoriteCount: json["favoriteCount"] ?? "0",
     uid: json["uid"],
     lastLoginAt: json["lastLoginAt"],
@@ -96,7 +96,7 @@ class AppUser {
     subscriptionType: json["subscriptionType"],
     imageUrl: json["imageUrl"],
 
-    subscriptionEndsAt: json["subscriptionEndsAt"] ,
+    subscriptionEndsAt: json["subscriptionEndsAt"],
     name: json["name"],
     age: json["age"] ?? "",
     isActive: json["isActive"],
