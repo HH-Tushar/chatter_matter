@@ -27,12 +27,12 @@ class _UserRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(user.name),
+                  SelectableText(user.name),
                   Row(
                     spacing: 5,
                     children: [
                       Icon(Icons.email_outlined, size: 15),
-                      Text(user.email),
+                      SelectableText(user.email),
                     ],
                   ),
                 ],

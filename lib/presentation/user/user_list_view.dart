@@ -1,5 +1,7 @@
 import 'package:chatter_matter_admin/common/custom_button.dart';
+import 'package:chatter_matter_admin/common/custom_snake_bar.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
+import 'package:chatter_matter_admin/core/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,15 @@ class _UserListViewState extends State<UserListView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  final TextEditingController emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = context.watch();
@@ -47,14 +58,41 @@ class _UserListViewState extends State<UserListView>
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: emailController,
                           decoration: InputDecoration(
                             filled: true,
+
                             hintText: "search by email...",
                             fillColor: customWhite,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            prefixIcon: Icon(Icons.search),
+                            // prefixIcon: Icon(Icons.search),
+                            suffixIcon: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                              ),
+                              child: IconButton(
+                                onPressed: () async {
+                                  final (user, error) = await userProvider
+                                      .findUser(emailController.text);
+                                  if (user != null) {
+                                    emailController.text = "";
+                                    showSearchUserDetailsDialog(
+                                      context: context,
+                                      user: user,
+                                    );
+                                  } else {
+                                    showToast(
+                                      context: context,
+                                      title: error?.title ?? "",
+                                      type: ToastType.failed,
+                                    );
+                                  }
+                                },
+                                icon: Icon(Icons.search),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -183,7 +221,10 @@ class _UserListViewState extends State<UserListView>
                   cacheExtent: 120,
                   //  itemExtent: 120,
                   itemBuilder: (context, index) => _UserRow(
-                    onManage: () => showUserManagementDialog(context: context),
+                    onManage: () => showUserManagementDialog(
+                      context: context,
+                      user: userProvider.appUsers[index],
+                    ),
                     onView: () => showUserDetailsDialog(
                       context: context,
                       user: userProvider.appUsers[index],

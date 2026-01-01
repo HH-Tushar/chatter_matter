@@ -84,12 +84,11 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
 
   List<ChartData> chartData = [];
 
-  double maxPick = 0;
+  double maxPick = 10;
   double divisor = 2;
 
   convertToFullYearChartData(List<BarStack> barStacks) {
     // List of all months in order
-  
 
     // Create a map for fast lookup
     final barMap = {for (var b in barStacks) b.month: b};
@@ -104,6 +103,7 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
       }
     }).toList();
 
+    print(chartData);
     setState(() {
       getMaxPickWithDivisor(chartData);
     });
@@ -246,7 +246,7 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
                 ),
               ),
               primaryYAxis: NumericAxis(
-                interval: divisor,
+                interval: divisor < 1 ? 1 : null,
                 maximum: maxPick,
                 majorGridLines: MajorGridLines(
                   width: 0.5,
@@ -262,7 +262,7 @@ class _UserGrowthChartState extends State<UserGrowthChart> {
                 axisLabelFormatter: (AxisLabelRenderDetails args) {
                   final value = args.value > 1000
                       ? "${(args.value / 1000).toStringAsFixed(1)}k"
-                      : "${args.value}";
+                      : args.value.toStringAsFixed(1);
                   return ChartAxisLabel(
                     value,
                     const TextStyle(fontSize: 12, color: Colors.black54),

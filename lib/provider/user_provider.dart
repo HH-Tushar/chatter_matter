@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:chatter_matter_admin/application/model/user_model.dart';
 import 'package:chatter_matter_admin/application/repo/app_user_repo.dart';
 import 'package:chatter_matter_admin/env.dart';
 import 'package:flutter/material.dart';
+
+import '../core/api_handler.dart';
 
 class UserProvider extends ChangeNotifier {
   UserProvider() {
@@ -60,5 +64,15 @@ class UserProvider extends ChangeNotifier {
     } else {
       isActive = null;
     }
+  }
+
+  Future<Attempt<AppUser>> findUser(String email) async {
+    isLoading = true;
+    notifyListeners();
+
+    final (user, error) = await _appUserRepo.getUser(email: email);
+    isLoading = false;
+   notifyListeners();
+    return (user, error);
   }
 }
