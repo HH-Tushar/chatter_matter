@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/model/category_model.dart';
 import '../../application/model/subscription_model.dart';
 import '../../application/repo/subscription_repo.dart';
 import '../../common/app_bar.dart';
@@ -16,7 +15,6 @@ import '../../common/custom_input.dart';
 import '../../common/custom_snake_bar.dart';
 import '../../common/padding.dart';
 import '../../env.dart';
-import '../../provider/category_provider.dart';
 import '../../provider/subscription_provider.dart';
 part 'edit_plan.dart';
 

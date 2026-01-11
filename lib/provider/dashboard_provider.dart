@@ -16,6 +16,7 @@ class DashboardProvider extends ChangeNotifier {
   bool isLoadingTransaction = false;
   bool isPaginatingTransaction = false;
   bool reachEnd = false;
+  User? user;
 
   DashboardStatus? dashboardStatus;
   SubscriptionTransactionResponse? _subscriptionTransactionResponse;
@@ -42,10 +43,10 @@ class DashboardProvider extends ChangeNotifier {
       final userCredential = await FirebaseConfig.auth
           .signInWithEmailAndPassword(email: email, password: password);
 
-      final user = userCredential.user;
+       user = userCredential.user;
 
       if (user != null) {
-        print('Logged in as ${user.email}');
+        print('Logged in as ${user?.email}');
         notifyListeners();
         await init();
         return "User login successfully";

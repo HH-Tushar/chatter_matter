@@ -1,11 +1,13 @@
 import 'package:chatter_matter_admin/common/custom_button.dart';
 import 'package:chatter_matter_admin/common/custom_input.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/app_bar.dart';
 import '../../common/colors.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
+import '../../provider/dashboard_provider.dart';
 part 'personal_space.dart';
 part 'privacy_policy.dart';
 

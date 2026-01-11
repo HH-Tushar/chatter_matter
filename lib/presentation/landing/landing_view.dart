@@ -81,7 +81,7 @@ class LandingView extends StatelessWidget {
                       title: "Setting",
                     ),
                     drawerButton(
-                      icon: "assets/icon/setting.svg",
+                      icon: "assets/icon/dashboard.svg",
                       isSelected: currentPath.contains(
                         CustomRoute.transactions,
                       ),

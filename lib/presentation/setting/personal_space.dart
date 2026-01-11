@@ -5,6 +5,8 @@ class PersonalSpace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DashboardProvider dashboardProvider=context.watch();
+    final admin=dashboardProvider.user;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,6 +22,7 @@ class PersonalSpace extends StatelessWidget {
           isEnable: true,
           onChange: (e) {},
           isBig: false,
+          initialValue: admin?.displayName,
         ),
         vPad20,
         Text("Email Address"),
@@ -27,9 +30,10 @@ class PersonalSpace extends StatelessWidget {
         customInput(
           applyBorder: true,
           hintText: "Your email",
-          isEnable: true,
+          isEnable: false,
           onChange: (e) {},
           isBig: false,
+          initialValue: admin?.email,
         ),
 
         vPad20,
@@ -67,7 +71,7 @@ class PersonalSpace extends StatelessWidget {
         vPad10,
         customInput(
           applyBorder: true,
-          hintText: "Your email",
+          hintText: "Password",
           isEnable: true,
           onChange: (e) {},
           isBig: false,
@@ -77,8 +81,8 @@ class PersonalSpace extends StatelessWidget {
         vPad10,
         customInput(
           applyBorder: true,
-          hintText: "Your email",
-          isEnable: true,
+          hintText: "Password",
+          isEnable: false,
           onChange: (e) {},
           isBig: false,
         ),
