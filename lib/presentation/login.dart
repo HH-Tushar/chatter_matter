@@ -54,7 +54,7 @@ class _LoginViewState extends State<LoginView> {
             // hPadExp,
             SizedBox(width: double.infinity, height: 0),
             Text(
-              "Login to see your Business grouty".toUpperCase(),
+              "Login to see your Business Growth".toUpperCase(),
               style: heading(),
             ),
             vPad35,

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 
 import '../application/firebase/firebase_config.dart';
+import '../application/model/delete_req_model.dart';
 import '../application/model/transaction_model.dart';
 import '../application/repo/dashboard_repo.dart';
 
@@ -15,16 +16,23 @@ class DashboardProvider extends ChangeNotifier {
   final _dashboardRepo = DashboardRepo();
   bool isLoadingTransaction = false;
   bool isPaginatingTransaction = false;
-  bool reachEnd = false;
+  bool reachEndTransaction = false;
+  bool isLoadingDelREq = false;
+  bool isPaginatingDelREq = false;
+  bool reachEndDelREq = false;
   User? user;
 
   DashboardStatus? dashboardStatus;
   SubscriptionTransactionResponse? _subscriptionTransactionResponse;
+  DeleteReqResponse? _deleteReqResponse;
   List<SubscriptionTransaction> transactionList = [];
+
+  List<DeleteRequestModel> deleteReqs = [];
 
   init() async {
     await getTransactions();
     await getDashboardStats();
+    await getDeleteRequests();
   }
 
   Future<bool> retrieveUser() async {
@@ -43,7 +51,7 @@ class DashboardProvider extends ChangeNotifier {
       final userCredential = await FirebaseConfig.auth
           .signInWithEmailAndPassword(email: email, password: password);
 
-       user = userCredential.user;
+      user = userCredential.user;
 
       if (user != null) {
         print('Logged in as ${user?.email}');
@@ -68,7 +76,7 @@ class DashboardProvider extends ChangeNotifier {
   Future<void> getTransactions() async {
     if (_subscriptionTransactionResponse != null &&
         _subscriptionTransactionResponse?.nextPageToken == null) {
-      reachEnd = true;
+      reachEndTransaction = true;
       return;
     }
     if (_subscriptionTransactionResponse == null) {
@@ -95,5 +103,36 @@ class DashboardProvider extends ChangeNotifier {
   Future<void> restoreTransaction() async {
     _subscriptionTransactionResponse = null;
     await getTransactions();
+  }
+  Future<void> restoreDelReq() async {
+    _deleteReqResponse = null;
+    await getDeleteRequests();
+  }
+
+  Future<void> getDeleteRequests() async {
+    if (_deleteReqResponse != null &&
+        _deleteReqResponse?.nextPageToken == null) {
+      reachEndDelREq = true;
+      return;
+    }
+    if (_deleteReqResponse == null) {
+      isLoadingDelREq = true;
+    } else {
+      isPaginatingDelREq = true;
+    }
+    notifyListeners();
+
+    final (data, error) = await _dashboardRepo.getDelReqs();
+    if (data != null && _deleteReqResponse != null) {
+      _deleteReqResponse = data;
+      deleteReqs.addAll(data.data);
+    } else if (data != null) {
+      _deleteReqResponse = data;
+      deleteReqs = data.data;
+    }
+
+    isLoadingDelREq = false;
+    isPaginatingDelREq = false;
+    notifyListeners();
   }
 }

@@ -7,12 +7,17 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/category/category_list_view.dart';
+import 'presentation/delete_request/delete_request_view.dart';
 import 'presentation/home/home_view.dart';
 import 'presentation/landing/landing_view.dart';
 import 'presentation/question/question_list_view.dart';
 import 'presentation/transaction/transaction_list_view.dart';
 import 'presentation/user/user_list_view.dart';
 import 'provider/dashboard_provider.dart';
+import 'public/delete_user_public.dart';
+import 'public/payment_failed.dart';
+import 'public/payment_sucess.dart';
+import 'public/privacy_policy.dart';
 
 class CustomRoute {
   static const String home = "/home";
@@ -22,6 +27,11 @@ class CustomRoute {
   static const String subscription = "/subscription";
   static const String setting = "/setting";
   static const String transactions = "/transactions";
+  static const String deleteRequestView = "/deleteRequestView";
+  static const String privacyPolicy = "/privacy-policy";
+  static const String deleteAccountPage = "/deleteAccountPage";
+  static const String paymentSuccess = "/paymentSuccess";
+  static const String paymentFailed = "/paymentFailed";
 }
 
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -30,17 +40,54 @@ final GlobalKey<NavigatorState> _shellNavigatorKey =
 final router = GoRouter(
   initialLocation: '/home',
 
-  redirect: (context, state) async{
-    final token = await Provider.of<DashboardProvider>(context, listen: false).retrieveUser();
+  redirect: (context, state) async {
+    final token = await Provider.of<DashboardProvider>(
+      context,
+      listen: false,
+    ).retrieveUser();
 
     // If user is not logged in and not already on /auth, redirect to /auth
-    final loggingIn = state.uri.toString() == '/auth';
-    if (token == false && !loggingIn) {
+    final location = state.uri.path;
+
+    // ✅ ALLOW PUBLIC ROUTES
+    final publicRoutes = [
+      '/auth',
+      CustomRoute.privacyPolicy,
+      CustomRoute.deleteAccountPage,
+      CustomRoute.paymentFailed,
+      CustomRoute.paymentSuccess,
+    ];
+
+    // final loggingIn = state.uri.toString() == '/auth';
+    if (publicRoutes.contains(location)) {
+      return null;
+    }
+
+    if (token == false) {
       return '/auth';
     }
     return null;
   },
-  routes: [shellRoute, auth],
+  routes: [
+    shellRoute,
+    auth,
+    GoRoute(
+      path: CustomRoute.privacyPolicy,
+      builder: (context, state) => const PrivacyTermsView(),
+    ),
+    GoRoute(
+      path: CustomRoute.deleteAccountPage,
+      builder: (context, state) => const DeleteAccountPage(),
+    ),
+    GoRoute(
+      path: CustomRoute.paymentFailed,
+      builder: (context, state) => const PaymentFailed(),
+    ),
+    GoRoute(
+      path: CustomRoute.paymentSuccess,
+      builder: (context, state) => const PaymentSuccess(),
+    ),
+  ],
 );
 
 //
@@ -69,11 +116,13 @@ final shellRoute = ShellRoute(
             final categoryId = category?.split("-")[0];
             final categoryName = category?.split("-")[1];
 
-      
             return NoTransitionPage(
-              child: categoryId == null || categoryName==null
+              child: categoryId == null || categoryName == null
                   ? Placeholder(child: Center(child: Text("No Data found")))
-                  : QuestionListView(categoryId: categoryId,categoryName:categoryName),
+                  : QuestionListView(
+                      categoryId: categoryId,
+                      categoryName: categoryName,
+                    ),
             );
           },
         ),
@@ -84,23 +133,25 @@ final shellRoute = ShellRoute(
       pageBuilder: (context, state) =>
           const NoTransitionPage(child: UserListView()),
     ),
-   
-   
+
     GoRoute(
       path: CustomRoute.subscription,
       pageBuilder: (context, state) =>
           const NoTransitionPage(child: SubscriptionView()),
     ),
-   
-   
+
     GoRoute(
       path: CustomRoute.transactions,
       pageBuilder: (context, state) =>
           const NoTransitionPage(child: TransactionListView()),
     ),
-   
-   
-   
+
+    GoRoute(
+      path: CustomRoute.deleteRequestView,
+      pageBuilder: (context, state) =>
+          const NoTransitionPage(child: DeleteRequestView()),
+    ),
+
     GoRoute(
       path: CustomRoute.setting,
       pageBuilder: (context, state) =>

@@ -1,4 +1,4 @@
-const appName = "Chatter Matter";
+const appName = "Chatter Matter Admin";
 const currency = "\$";
 
 enum SubscriptionType { all, free, standard, vip }
