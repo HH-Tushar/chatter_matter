@@ -24,6 +24,7 @@ class CustomRoute {
   static const String category = "/category";
   static const String question = "/category/question";
   static const String users = "/users";
+  static const String auth = "/auth";
   static const String subscription = "/subscription";
   static const String setting = "/setting";
   static const String transactions = "/transactions";

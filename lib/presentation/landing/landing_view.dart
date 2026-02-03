@@ -1,12 +1,14 @@
 import 'package:chatter_matter_admin/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../common/colors.dart';
 import '../../common/custom_button.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
 
 import '../../env.dart';
+import '../../provider/dashboard_provider.dart';
 
 part 'components/drawer.dart';
 
@@ -16,7 +18,7 @@ class LandingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final LandingController controller = context.watch();
+    final DashboardProvider controller = context.watch();
     final String currentPath = GoRouterState.of(context).matchedLocation;
     return Scaffold(
       body: DecoratedBox(
@@ -100,7 +102,10 @@ class LandingView extends StatelessWidget {
                       isLogoutButton: true,
                       icon: "assets/icon/logout.svg",
                       isSelected: true,
-                      onTap: () {},
+                      onTap: () async {
+                        controller.logout();
+                        context.go(CustomRoute.auth);
+                      },
                       title: "Logout",
                     ),
                   ],

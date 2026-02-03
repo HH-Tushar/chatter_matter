@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserList {
   final int count;
@@ -27,7 +26,7 @@ class UserList {
   Map<String, dynamic> toJson() => {
     "count": count,
     "nextPageToken": nextPageToken,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    // "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -46,7 +45,7 @@ class AppUser {
   final String name;
   final int journalCount;
   final int favoriteCount;
-  final String age;
+  final int age;
   final String email;
   final bool isActive;
   // final int updatedAt;
@@ -74,28 +73,21 @@ class AppUser {
 
   factory AppUser.fromRawJson(String str) => AppUser.fromJson(json.decode(str));
 
-  String toRawJson() => json.encode(toJson());
+  // String toRawJson() => json.encode(toJson());
 
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
     id: json["id"],
     role: json["role"],
-
-    // subscriptionStartedAt: json["subscriptionStartedAt"] != null
-    //     ? (json["subscriptionStartedAt"] as Timestamp).toDate()
-    //     : null,
     subscriptionStartedAt: DateTime.now(),
-    // subscriptionEndsAt: DateTime.now(),
     createdAt: DateTime.now(),
     isEmailVerified: json["isEmailVerified"],
-
     journalCount: json["journalCount"] ?? 0,
-    favoriteCount: json["favoriteCount"] ?? "0",
+    favoriteCount: json["favoriteCount"] ??0,
     uid: json["uid"],
-    lastLoginAt: json["lastLoginAt"],
+    lastLoginAt: 1,
     provider: json["provider"],
     subscriptionType: json["subscriptionType"],
     imageUrl: json["imageUrl"],
-
     subscriptionEndsAt: json["subscriptionEndsAt"],
     name: json["name"],
     age: json["age"] ?? "",
@@ -104,21 +96,21 @@ class AppUser {
     // updatedAt: json["updatedAt"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "role": role,
-    "subscriptionStartedAt": subscriptionStartedAt,
-    "isEmailVerified": isEmailVerified,
-    "createdAt": createdAt,
-    "uid": uid,
-    "lastLoginAt": lastLoginAt,
-    "provider": provider,
-    "subscriptionType": subscriptionType,
-    "imageUrl": imageUrl,
-    "subscriptionEndsAt": subscriptionEndsAt,
-    "name": name,
-    "age": age,
-    "email": email,
-    // "updatedAt": updatedAt,
-  };
+  // Map<String, dynamic> toJson() => {
+  //   "id": id,
+  //   "role": role,
+  //   "subscriptionStartedAt": subscriptionStartedAt,
+  //   "isEmailVerified": isEmailVerified,
+  //   "createdAt": createdAt,
+  //   "uid": uid,
+  //   "lastLoginAt": lastLoginAt,
+  //   "provider": provider,
+  //   "subscriptionType": subscriptionType,
+  //   "imageUrl": imageUrl,
+  //   "subscriptionEndsAt": subscriptionEndsAt,
+  //   "name": name,
+  //   "age": age,
+  //   "email": email,
+  //   // "updatedAt": updatedAt,
+  // };
 }

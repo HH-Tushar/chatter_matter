@@ -1,9 +1,11 @@
 import 'package:chatter_matter_admin/common/colors.dart';
 import 'package:chatter_matter_admin/common/custom_button.dart';
 import 'package:chatter_matter_admin/common/custom_input.dart';
+import 'package:chatter_matter_admin/common/custom_snake_bar.dart';
 import 'package:chatter_matter_admin/common/custom_text_style.dart';
 import 'package:chatter_matter_admin/common/navigator.dart';
 import 'package:chatter_matter_admin/common/padding.dart';
+import 'package:chatter_matter_admin/core/enums.dart';
 import 'package:chatter_matter_admin/provider/dashboard_provider.dart';
 import 'package:chatter_matter_admin/router.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +33,13 @@ class _LoginViewState extends State<LoginView> {
       listen: false,
     ).loginAndGetToken(email: email, password: password);
 
-    if (data != null) {
+    if (data != null && mounted) {
       // print(data);
       // animatedNavigateReplaceAll(context, )
+      showToast(context: context, title: data, type: ToastType.success);
       context.go(CustomRoute.home);
     }
+
     setState(() {
       isLoading = false;
     });

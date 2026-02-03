@@ -30,9 +30,9 @@ class DashboardProvider extends ChangeNotifier {
   List<DeleteRequestModel> deleteReqs = [];
 
   init() async {
-    await getTransactions();
-    await getDashboardStats();
-    await getDeleteRequests();
+    // await getTransactions();
+    // await getDashboardStats();
+    // await getDeleteRequests();
   }
 
   Future<bool> retrieveUser() async {
@@ -65,6 +65,10 @@ class DashboardProvider extends ChangeNotifier {
       print('Login failed: ${e.toString()}');
       return null;
     }
+  }
+
+  Future<void> logout() async {
+    await FirebaseConfig.auth.signOut();
   }
 
   Future<void> getDashboardStats() async {
@@ -104,6 +108,7 @@ class DashboardProvider extends ChangeNotifier {
     _subscriptionTransactionResponse = null;
     await getTransactions();
   }
+
   Future<void> restoreDelReq() async {
     _deleteReqResponse = null;
     await getDeleteRequests();
