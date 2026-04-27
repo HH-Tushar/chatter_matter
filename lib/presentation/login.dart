@@ -38,6 +38,12 @@ class _LoginViewState extends State<LoginView> {
       // animatedNavigateReplaceAll(context, )
       showToast(context: context, title: data, type: ToastType.success);
       context.go(CustomRoute.home);
+    } else if (data == null && mounted) {
+      showToast(
+        context: context,
+        title: "Login failed",
+        type: ToastType.failed,
+      );
     }
 
     setState(() {

@@ -1,4 +1,5 @@
 import 'package:chatter_matter_admin/application/model/category_model.dart';
+import 'package:chatter_matter_admin/core/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ import '../../common/app_bar.dart';
 import '../../common/colors.dart';
 import '../../common/custom_button.dart';
 import '../../common/custom_dialouge.dart';
+import '../../common/custom_snake_bar.dart';
 import '../../common/custom_text_style.dart';
 import '../../common/padding.dart';
 import '../../provider/category_provider.dart';
@@ -33,29 +35,6 @@ class _QuestionListViewState extends State<QuestionListView> {
   // Category? category;
   QuestionModelList? questionModelList;
 
-  // void fetchCategory() {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   print(widget.categoryId);
-  //   Future.delayed(Duration(seconds: 1)).then((e) {
-  //     final categories = Provider.of<CategoryProvider>(
-  //       context,
-  //       listen: false,
-  //     ).categoryList;
-
-  //     if (categories.isNotEmpty) {
-  //       category = categories
-  //           .where((test) => test.id == widget.categoryId)
-  //           .first;
-  //     }
-  //   });
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  //   print(category);
-  // }
-
   void fetchQuestions() async {
     setState(() {
       isLoading = true;
@@ -69,6 +48,34 @@ class _QuestionListViewState extends State<QuestionListView> {
       questionModelList = data;
     } else if (data != null && questionModelList != null) {
       questionModelList!.data.addAll(data.data);
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void deleteQuestion(String questionId) async {
+    setState(() {
+      isLoading = true;
+    });
+    final (data, error) = await questionRepo.deleteQuestion(questionId);
+    if (data != null && data == true) {
+      questionModelList!.data = questionModelList!.data
+          .where((question) => question.id != questionId)
+          .toList();
+
+              showToast(
+        context: context,
+        title: "Question deleted successfully",
+        type: ToastType.success,
+      );
+    } else {
+      showToast(
+        context: context,
+        title: "Failed to delete question",
+        type: ToastType.failed,
+      );
     }
 
     setState(() {
@@ -259,13 +266,17 @@ class _QuestionListViewState extends State<QuestionListView> {
                                   Text("${item.favoritesCount}"),
                                   hPad5,
                                   IconButton(
-                                    onPressed: () {
-                                      showDeleteDialogue(
+                                    onPressed: () async {
+                                      final check = await showDeleteDialogue(
                                         content:
                                             "question.. will be deleted permanently.",
                                         title: "Delete Question..!!",
                                         context: context,
                                       );
+
+                                      if (check == true) {
+                                        deleteQuestion(item.id);
+                                      }
                                     },
                                     icon: Icon(
                                       Icons.delete_forever,

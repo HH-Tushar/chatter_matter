@@ -4,7 +4,7 @@ class QuestionModelList {
   // final bool success;
   final int count;
   String? pageToken;
-  final List<QuestionModel> data;
+   List<QuestionModel> data;
 
   QuestionModelList({
     required this.count,

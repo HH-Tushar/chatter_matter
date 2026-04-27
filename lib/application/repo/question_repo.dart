@@ -49,6 +49,47 @@ class QuestionRepo {
       return failed(Failure(title: e.toString()));
     }
   }
+  //add question
+  Future<Attempt<bool>> deleteQuestion(
+    String id, // example: https://yourapi.com/api
+  ) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return failed(SessionExpired());
+
+      final token = await user.getIdToken();
+
+      final url = Uri.parse("$baseUrl/deleteQuestion");
+
+      final body = jsonEncode({"questionId" : id});
+
+      final response = await http
+          .delete(
+            url,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: body,
+          )
+          .timeout(const Duration(seconds: 10)); // Prevents infinite waiting
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return success(true);
+      } else if (response.statusCode == 401) {
+        return failed(SessionExpired());
+      } else if (response.statusCode == 403) {
+        return failed(UnauthorizeAccess());
+      }
+      return failed(Failure(title: "Something went wrong"));
+    } on http.ClientException catch (e) {
+      return failed(Failure(title: e.message));
+    } on FormatException catch (e) {
+      return failed(Failure(title: e.message));
+    } on Exception catch (e) {
+      return failed(Failure(title: e.toString()));
+    }
+  }
 
   //get question paginator
 
