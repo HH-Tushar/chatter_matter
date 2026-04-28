@@ -31,122 +31,92 @@ class SubscriptionTransactionResponse {
   }
 }
 
+
 class SubscriptionTransaction {
-  String? id;
-  String userId;
-  String planId;
-
-  // Stripe Identifiers
-  String stripeEventId;
-  String stripeCheckoutSessionId;
-  String stripePaymentIntentId;
-  String? stripeCustomerId;
-  String? stripeInvoiceId;
-  String? stripeSubscriptionId;
-  String? stripePriceId;
-
-  // Payment Info
-  int amountSubtotal;
-  int amountTotal;
-  int packageDuration;
-  String currency;
-  String paymentStatus; // 'paid' | 'unpaid' | 'no_payment_required'
-  String status; // 'complete' | 'open' | 'expired'
-
-  // Environment
-  bool livemode;
-
-  // Metadata
-  String? userEmail;
-  Map<String, String>? metadata;
-
-  // Timestamps
-  DateTime stripeCreatedAt;
-  DateTime createdAt;
+  final String? id;
+  final String userId;
+  final String productId;
+  final String store;
+  final double price;
+  final String currency;
+  final String originalTransactionId;
+  final String transactionId;
+  final String status; // 'paid' | 'unpaid' | 'expired'
+  final String countryCode;
+  final String? userEmail;
+  final Map<String, String>? metadata;
+  final DateTime purchasedAt;
+  final DateTime expiresAt;
+  final DateTime createdAt;
 
   SubscriptionTransaction({
     this.id,
     required this.userId,
-    required this.planId,
-    required this.stripeEventId,
-    required this.stripeCheckoutSessionId,
-    required this.stripePaymentIntentId,
-    this.stripeCustomerId,
-    this.stripeInvoiceId,
-    this.stripeSubscriptionId,
-    this.stripePriceId,
-    required this.amountSubtotal,
-    required this.amountTotal,
-    required this.packageDuration,
+    required this.productId,
+    required this.store,
+    required this.price,
     required this.currency,
-    required this.paymentStatus,
+    required this.originalTransactionId,
+    required this.transactionId,
     required this.status,
-    required this.livemode,
+    required this.countryCode,
     this.userEmail,
     this.metadata,
-    required this.stripeCreatedAt,
+    required this.purchasedAt,
+    required this.expiresAt,
     required this.createdAt,
   });
 
-  factory SubscriptionTransaction.fromJson(Map<String, dynamic> json) {
-    DateTime parseTimestamp(Map<String, dynamic> ts) {
-      final seconds = ts['_seconds'] as int? ?? 0;
-      final nanoseconds = ts['_nanoseconds'] as int? ?? 0;
-      return DateTime.fromMillisecondsSinceEpoch(
-        seconds * 1000 + (nanoseconds / 1000000).round(),
-      );
-    }
-
+  // Convert JSON Map to Model
+  factory SubscriptionTransaction.fromJson(Map<String, dynamic> json, [String? docId]) {
     return SubscriptionTransaction(
-      id: json['id'] as String?,
-      userId: json['userId'] as String,
-      planId: json['planId'] as String,
-      stripeEventId: json['stripeEventId'] as String,
-      stripeCheckoutSessionId: json['stripeCheckoutSessionId'] as String,
-      stripePaymentIntentId: json['stripePaymentIntentId'] as String,
-      stripeCustomerId: json['stripeCustomerId'] as String?,
-      stripeInvoiceId: json['stripeInvoiceId'] as String?,
-      stripeSubscriptionId: json['stripeSubscriptionId'] as String?,
-      stripePriceId: json['stripePriceId'] as String?,
-      amountSubtotal: json['amountSubtotal'] as int,
-      amountTotal: json['amountTotal'] as int,
-      packageDuration: json['packageDuration'] as int,
-      currency: json['currency'] as String,
-      paymentStatus: json['paymentStatus'] as String,
-      status: json['status'] as String,
-      livemode: json['livemode'] as bool,
+      id: docId ?? json['id'] as String?,
+      userId: json['userId'] ?? '',
+      productId: json['productId'] ?? '',
+      store: json['store'] ?? '',
+      // Handles both int and double from JSON
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      currency: json['currency'] ?? '',
+      originalTransactionId: json['originalTransactionId'] ?? '',
+      transactionId: json['transactionId'] ?? '',
+      status: json['status'] ?? 'unpaid',
+      countryCode: json['countryCode'] ?? '',
       userEmail: json['userEmail'] as String?,
-      metadata: json['metadata'] != null
-          ? Map<String, String>.from(json['metadata'] as Map)
+      metadata: json['metadata'] != null 
+          ? Map<String, String>.from(json['metadata']) 
           : null,
-      stripeCreatedAt: parseTimestamp(json['stripeCreatedAt']),
-      createdAt: parseTimestamp(json['createdAt']),
+      purchasedAt: _parseDate(json['purchasedat']),
+      expiresAt: _parseDate(json['expiresAt']),
+      createdAt: _parseDate(json['createdAt']),
     );
   }
 
+  // Convert Model to JSON Map
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'userId': userId,
-      'planId': planId,
-      'stripeEventId': stripeEventId,
-      'stripeCheckoutSessionId': stripeCheckoutSessionId,
-      'stripePaymentIntentId': stripePaymentIntentId,
-      'stripeCustomerId': stripeCustomerId,
-      'stripeInvoiceId': stripeInvoiceId,
-      'stripeSubscriptionId': stripeSubscriptionId,
-      'stripePriceId': stripePriceId,
-      'amountSubtotal': amountSubtotal,
-      'amountTotal': amountTotal,
-      'packageDuration': packageDuration,
+      'productId': productId,
+      'store': store,
+      'price': price,
       'currency': currency,
-      'paymentStatus': paymentStatus,
+      'originalTransactionId': originalTransactionId,
+      'transactionId': transactionId,
       'status': status,
-      'livemode': livemode,
+      'countryCode': countryCode,
       'userEmail': userEmail,
       'metadata': metadata,
-      'stripeCreatedAt': stripeCreatedAt.toIso8601String(),
+      'purchasedat': purchasedAt.toIso8601String(),
+      'expiresAt': expiresAt.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
     };
+  }
+
+  // Helper to handle various Date formats (String or Firestore Timestamp)
+  static DateTime _parseDate(dynamic date) {
+    if (date == null) return DateTime.now();
+    if (date is String) return DateTime.parse(date);
+    // If you are using Cloud Firestore package, dates come back as Timestamps
+    if (date.runtimeType.toString() == 'Timestamp') return date.toDate();
+    return DateTime.now();
   }
 }

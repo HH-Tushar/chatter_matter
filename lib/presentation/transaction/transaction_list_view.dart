@@ -100,13 +100,15 @@ class TransactionListView extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text("Plan Id :"),
-                                      SelectableText(item.planId),
+                                      SelectableText(item.productId),
                                     ],
                                   ),
                                   Row(
                                     children: [
                                       Text("Duration : "),
-                                      Text("${item.packageDuration} month"),
+                                      Text(
+                                        "${item.expiresAt.difference(item.purchasedAt).inDays ~/ 30} month",
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -119,10 +121,7 @@ class TransactionListView extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text("Amount : "),
-                                      Text(
-                                        (item.amountTotal / 100).toString() +
-                                            currency,
-                                      ),
+                                      Text((item.price).toString() + currency),
                                     ],
                                   ),
                                   Row(
@@ -142,16 +141,8 @@ class TransactionListView extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      Text("Session : "),
-                                      SelectableText(
-                                        item.stripeCheckoutSessionId,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
                                       Text("Trans. Id :"),
-                                      SelectableText(item.id ?? ""),
+                                      SelectableText(item.transactionId),
                                     ],
                                   ),
                                   // Text(item.stripeEventId),

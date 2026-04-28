@@ -52,6 +52,7 @@ void showAddQuestionDialog({
               setState(() {
                 isLoading = false;
               });
+              Navigator.pop(context);
             }
 
             return Container(
@@ -204,7 +205,7 @@ void showAddQuestionDialog({
                     spacing: 20,
                     children: [
                       Expanded(
-                        child: customOutlineButton(
+                        child: customFilledButton(
                           bg: customPurple,
                           isLoading: isLoading,
                           onTap: () => Navigator.pop(context),
